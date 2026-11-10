@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <!-- ========== 1.0 Meta ========== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FYPilot - Coordinator</title>
+
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%230066B3'/%3E%3Ccircle cx='12' cy='12' r='4' fill='%23FFD500'/%3E%3C/svg%3E">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/supervisor.css">
+    <link rel="stylesheet" href="assets/css/coordinator.css">
+</head>
+
+<body>
+    <!-- ========== 2.0 Sidebar ========== -->
+    <aside class="sidebar glass">
+        <a href="coordinator.html" class="brand">
+            <i class="ri-compass-3-line"></i>
+            <span><em>FYP</em>ilot</span>
+        </a>
+
+        <nav class="nav-links">
+            <button class="nav-btn active" data-section="overview"><i
+                    class="ri-dashboard-line"></i><span>Overview</span></button>
+            <button class="nav-btn" data-section="projects"><i
+                    class="ri-folder-chart-line"></i><span>Projects</span></button>
+            <button class="nav-btn" data-section="supervisors"><i
+                    class="ri-user-star-line"></i><span>Supervisors</span></button>
+            <button class="nav-btn" data-section="reports"><i
+                    class="ri-file-chart-line"></i><span>Reports</span></button>
+            <button class="nav-btn" id="logoutBtn"><i class="ri-logout-box-r-line"></i><span>Log out</span></button>
+        </nav>
+
+        <button class="theme-btn neu neu-circle" id="themeToggle" aria-label="Toggle theme">
+            <i class="ri-moon-line"></i>
+        </button>
+    </aside>
+
+    <!-- ========== 3.0 Main Area ========== -->
+    <main class="dash-main">
+        <div class="dash-inner">
+
+            <!-- ========== 3.1 Top Bar ========== -->
+            <header class="topline">
+                <div class="greet">
+                    <h2 id="pageTitle">Overview</h2>
+                    <p>Prof. T. Sibanda, Coordinator · Sunday, 1 November 2026</p>
+                </div>
+                <div class="actions">
+                    <div class="avatar neu neu-circle">
+                        <div class="profile-icon"><i class="ri-admin-line"></i></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== 4.0 Overview ========== -->
+            <section class="view active" id="overview">
+                <div class="stats">
+                    <div class="stat primary">
+                        <i class="ri-group-line"></i>
+                        <div><strong id="statStudents">0</strong><span>Students</span></div>
+                    </div>
+                    <div class="stat accent">
+                        <i class="ri-user-star-line"></i>
+                        <div><strong id="statSupervisors">0</strong><span>Supervisors</span></div>
+                    </div>
+                    <div class="stat light">
+                        <i class="ri-line-chart-line"></i>
+                        <div><strong id="statAvg">0%</strong><span>Average progress</span></div>
+                    </div>
+                    <div class="stat glass">
+                        <i class="ri-alarm-warning-line"></i>
+                        <div><strong id="statAttention">0</strong><span>Need attention</span></div>
+                    </div>
+                </div>
+
+                <p class="section-label">Falling behind</p>
+                <ul class="rows" id="behindRows"></ul>
+            </section>
+
+            <!-- ========== 5.0 Projects ========== -->
+            <section class="view" id="projects">
+                <div class="filter-bar">
+                    <input type="search" id="projectSearch" placeholder="Search student, project or supervisor">
+                    <div class="chips" id="projectChips">
+                        <button class="chip active" data-filter="all">All</button>
+                        <button class="chip" data-filter="attention">Needs attention</button>
+                        <button class="chip" data-filter="ontrack">On track</button>
+                    </div>
+                </div>
+                <ul class="rows" id="projectRows"></ul>
+            </section>
+
+            <!-- ========== 6.0 Supervisors ========== -->
+            <section class="view" id="supervisors">
+                <p class="section-label">Workload</p>
+                <ul class="rows" id="supervisorRows"></ul>
+            </section>
+
+            <!-- ========== 7.0 Reports ========== -->
+            <section class="view" id="reports">
+                <div class="filter-bar">
+                    <div class="chips" id="reportChips">
+                        <button class="chip active" data-report="progress">Progress</button>
+                        <button class="chip" data-report="overdue">Overdue</button>
+                        <button class="chip" data-report="workload">Workload</button>
+                    </div>
+                    <div class="export">
+                        <button class="btn btn-primary btn-small" id="exportCsv"><i class="ri-file-excel-2-line"></i>
+                            CSV</button>
+                        <button class="btn btn-small ghost" id="exportPdf"><i class="ri-file-pdf-2-line"></i>
+                            PDF</button>
+                    </div>
+                </div>
+                <div class="report glass" id="reportOut"></div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ========== 8.0 Toast ========== -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="assets/js/coordinator.js" defer></script>
+</body>
+
+</html>

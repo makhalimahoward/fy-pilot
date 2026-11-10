@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <!-- ========== 1.0 Meta ========== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FYPilot - Student</title>
+
+    <!-- Inline SVG favicon: no file or library needed -->
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%230066B3'/%3E%3Ccircle cx='12' cy='12' r='4' fill='%23FFD500'/%3E%3C/svg%3E">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/student.css">
+    <link rel="stylesheet" href="assets/css/extras.css">
+</head>
+
+<body>
+    <!-- ========== 2.0 Sidebar ========== -->
+    <aside class="sidebar glass">
+        <a href="student.html" class="brand">
+            <i class="ri-compass-3-line"></i>
+            <span><em>FYP</em>ilot</span>
+        </a>
+
+        <nav class="nav-links">
+            <button class="nav-btn active" data-section="dashboard"><i
+                    class="ri-home-5-line"></i><span>Home</span></button>
+            <button class="nav-btn" data-section="topics"><i class="ri-lightbulb-line"></i><span>Topics</span></button>
+            <button class="nav-btn" data-section="project"><i
+                    class="ri-folder-open-line"></i><span>Project</span></button>
+            <button class="nav-btn" data-section="milestones"><i
+                    class="ri-flag-line"></i><span>Milestones</span></button>
+            <button class="nav-btn" data-section="feedback"><i
+                    class="ri-chat-quote-line"></i><span>Feedback</span></button>
+            <button class="nav-btn" data-section="documents"><i
+                    class="ri-file-text-line"></i><span>Documents</span></button>
+            <button class="nav-btn" id="logoutBtn"><i class="ri-logout-box-r-line"></i><span>Log out</span></button>
+        </nav>
+
+        <button class="theme-btn neu neu-circle" id="themeToggle" aria-label="Toggle theme">
+            <i class="ri-moon-line"></i>
+        </button>
+    </aside>
+
+    <!-- ========== 3.0 Main Area (centred beside the sidebar) ========== -->
+    <main class="dash-main">
+        <div class="dash-inner">
+
+            <!-- ========== 3.1 Top Bar ========== -->
+            <header class="topline">
+                <div class="greet">
+                    <h2 id="pageTitle">Dashboard</h2>
+                    <p id="todayLine"></p>
+                </div>
+
+                <div class="actions">
+                    <button class="bell neu neu-circle" id="bellBtn" aria-label="Notifications">
+                        <i class="ri-notification-3-line"></i>
+                        <span class="badge" id="bellBadge" style="display:none">0</span>
+                    </button>
+                    <div class="notif-panel glass" id="notifPanel">
+                        <h4>Notifications</h4>
+                    </div>
+                    <div class="avatar neu neu-circle">
+                        <div class="profile-icon"><i class="ri-user-smile-line"></i></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== 4.0 Home ========== -->
+            <section class="view active" id="dashboard">
+                <div class="banner" id="banner"></div>
+
+                <p class="section-label">Overview</p>
+                <div class="stats" id="homeStats"></div>
+
+                <p class="section-label">Your work</p>
+                <ul class="work" id="workList"></ul>
+
+                <p class="section-label">Latest feedback</p>
+                <div id="latestFeedback"></div>
+            </section>
+
+            <!-- ========== 4.5 Topics ========== -->
+            <section class="view" id="topics">
+                <h3 class="page-title">Project topics</h3>
+                <p class="lead" id="topicsLead"></p>
+                <div id="myPicks"></div>
+                <ul class="rows" id="topicRows" style="margin-top:1rem"></ul>
+            </section>
+
+            <!-- ========== 5.0 Project ========== -->
+            <section class="view" id="project">
+                <div id="projectBody"></div>
+            </section>
+
+            <!-- ========== 6.0 Milestones ========== -->
+            <section class="view" id="milestones">
+                <div id="milestoneBody"></div>
+            </section>
+
+            <!-- ========== 7.0 Feedback ========== -->
+            <section class="view" id="feedback">
+                <div id="feedbackBody"></div>
+            </section>
+
+            <!-- ========== 8.0 Documents ========== -->
+            <section class="view" id="documents">
+                <h3 class="page-title">Documents</h3>
+                <input type="file" id="fileInput" class="sr-file" aria-label="Choose a file to upload">
+                <div class="doc-grid" id="docGrid"></div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ========== 9.0 Assistant (placeholder) ========== -->
+    <button class="fab neu neu-circle" id="fabBtn" aria-label="Assistant">
+        <i class="ri-sparkling-2-line"></i>
+    </button>
+
+    <div class="fab-panel glass" id="fabPanel">
+        <h4>Assistant</h4>
+        <p>The assistant is planned as a later addition. It will suggest what to do next.</p>
+    </div>
+
+    <!-- ========== 10.0 Toast ========== -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/student.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+/* ========== 1.0 Coordinator: Filter Bar ========== */
+/* Search box and chips above the projects list and the report preview */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .9rem;
+    margin-bottom: 1.1rem;
+
+    input[type="search"] {
+        flex: 1;
+        min-width: 220px;
+        padding: .7rem 1.1rem;
+        border: 1px solid var(--glass-border);
+        border-radius: 999px;
+        background: var(--glass-solid);
+        color: var(--text);
+        font: inherit;
+        font-size: .9rem;
+    }
+}
+
+.chips,
+.export {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.chip {
+    padding: .5rem 1rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+
+    &.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+}
+
+/* ========== 2.0 Coordinator: Workload Bar ========== */
+.load {
+    width: 120px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--bg);
+    overflow: hidden;
+
+    span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--primary);
+    }
+
+    &.over span {
+        background: var(--accent);
+    }
+}
+
+/* ========== 3.0 Coordinator: Report Preview ========== */
+.report {
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+
+    h3 {
+        margin-bottom: .2rem;
+    }
+
+    small {
+        display: block;
+        margin-bottom: 1rem;
+        opacity: .7;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .88rem;
+    }
+
+    th,
+    td {
+        padding: .65rem .6rem;
+        text-align: left;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    th {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+}
+
+/* ========== 4.0 Coordinator: Print (PDF export) ========== */
+@media print {
+
+    .sidebar,
+    .topline,
+    .filter-bar,
+    .toast {
+        display: none !important;
+    }
+
+    .view:not(#reports) {
+        display: none !important;
+    }
+
+    .dash-main {
+        margin: 0;
+        padding: 0;
+    }
+
+    .report {
+        box-shadow: none;
+        background: #fff;
+        color: #000;
+    }
+}

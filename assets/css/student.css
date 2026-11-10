@@ -1,0 +1,1342 @@
+/* ========== 1.0 Student: Layout ========== */
+/* Student page only: the content is centred in the space to the right of the sidebar */
+.dash-main {
+    margin-left: 8rem;
+    min-height: 100vh;
+    padding: 3rem 2rem 8rem;
+}
+
+.dash-inner {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+/* Student page only: sidebar active state. Colour comes from the NUST palette only */
+.sidebar .nav-btn.active,
+.sidebar .nav-btn.active i {
+    color: var(--primary);
+}
+
+/* ========== 2.0 Student: Top Bar ========== */
+/* Student page only: title on the left, bell and avatar on the right */
+.topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+
+    .greet h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .greet p {
+        margin-top: .3rem;
+        font-size: .9rem;
+        font-weight: 300;
+        color: var(--text-muted);
+    }
+
+    .actions {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: .9rem;
+    }
+}
+
+.bell {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    color: var(--text);
+
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+        font-size: .68rem;
+        font-weight: 700;
+    }
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+}
+
+/* The profile icon sits in a gradient circle inside the avatar */
+.profile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--grad-brand);
+    color: #fff;
+
+    i {
+        font-size: 1.25rem;
+    }
+}
+
+/* Notification list, hidden until the bell is pressed */
+.notif-panel {
+    position: absolute;
+    top: calc(100% + .6rem);
+    right: 4.2rem;
+    width: 280px;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius);
+    display: none;
+    z-index: 50;
+
+    &.open {
+        display: block;
+    }
+
+    h4 {
+        font-size: .9rem;
+        font-weight: 600;
+        margin-bottom: .4rem;
+    }
+
+    .notif-item {
+        padding: .6rem 0;
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        flex-direction: column;
+        gap: .15rem;
+
+        strong {
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+        small {
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+    }
+}
+
+/* ========== 3.0 Student: Views ========== */
+/* One section shows at a time, switched from the sidebar */
+.view {
+    display: none;
+
+    &.active {
+        display: block;
+        animation: viewIn .5s var(--ease-out) both;
+    }
+}
+
+@keyframes viewIn {
+    from {
+        opacity: 0;
+        translate: 0 16px;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: .4rem;
+}
+
+.lead {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.block-title {
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+    margin: 2.5rem 0 .75rem;
+}
+
+/* ========== 4.0 Student: Home Banner Carousel ========== */
+/* One solid NUST gradient behind three stacked slides. No photo, no shade split */
+.banner {
+    position: relative;
+    min-height: 230px;
+    border-radius: var(--radius);
+    background: var(--grad-brand);
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 16px 36px var(--shadow-dark);
+}
+
+/* Each slide fills the banner. Only the active one is visible */
+.slide {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1.4fr .6fr;
+    align-items: center;
+    padding: 2.25rem 2.5rem 3.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .7s ease;
+
+    &.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+.slide-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .4rem;
+
+    .eyebrow {
+        font-size: .85rem;
+        font-weight: 500;
+        opacity: .88;
+    }
+
+    h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    p {
+        font-size: .95rem;
+        font-weight: 300;
+        opacity: .92;
+        margin-bottom: .8rem;
+    }
+}
+
+.banner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .7rem 1.25rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--primary);
+    font-size: .85rem;
+    font-weight: 600;
+    transition: transform .2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* The icon visual: a large icon in a translucent circle */
+.slide-visual {
+    display: grid;
+    place-items: center;
+
+    i {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 4rem;
+        color: #fff;
+        background: hsl(0 0% 100% / .18);
+    }
+}
+
+/* Slide indicators along the bottom edge */
+.dots {
+    position: absolute;
+    left: 2.5rem;
+    bottom: 1.25rem;
+    display: flex;
+    gap: .5rem;
+}
+
+.dot-btn {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: hsl(0 0% 100% / .45);
+    transition: width .3s ease, background .3s ease;
+
+    &.active {
+        width: 24px;
+        background: #fff;
+    }
+}
+
+/* ========== 5.0 Student: Section Labels ========== */
+/* Small uppercase label above each group on the home page */
+.section-label {
+    margin: 2.25rem 0 .9rem;
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+}
+
+/* ========== 6.0 Student: Overview Tiles ========== */
+/* Four tiles in the NUST palette, each with an icon chip and a value */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.25rem 1.35rem;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 24px var(--shadow-dark);
+
+    /* Icon chips are neuglass (the neu classes come from the HTML). The shadow is scaled down,
+     because the full neu shadow is built for large surfaces and makes a 40px chip look ringed */
+    i {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        font-size: 1.25rem;
+        color: var(--primary);
+        border: none;
+        box-shadow: 2px 2px 4px var(--shadow-dark),
+            -2px -2px 4px var(--shadow-light);
+    }
+
+    strong {
+        display: block;
+        font-size: 1.45rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    span {
+        font-size: .8rem;
+        font-weight: 300;
+        opacity: .9;
+    }
+
+    &.primary {
+        background: var(--primary);
+        color: #fff;
+
+        i {
+            background: hsl(var(--hue) 100% 26%);
+            color: #fff;
+            box-shadow: 2px 2px 4px hsl(0 0% 0% / .35),
+                -1px -1px 3px hsl(0 0% 100% / .15);
+        }
+    }
+
+    &.accent {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+
+        i {
+            background: hsl(50 100% 62%);
+            color: hsl(var(--hue) 26% 12%);
+        }
+    }
+
+    &.light {
+        background: var(--surface);
+        color: var(--text);
+
+        i {
+            background: var(--accent);
+            color: hsl(var(--hue) 26% 12%);
+        }
+    }
+
+    &.glass {
+        background: var(--glass-solid);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: var(--text);
+
+        strong {
+            font-size: 1.05rem;
+        }
+    }
+}
+
+/* ========== 7.0 Student: Work List ========== */
+/* Plain cards with a thumbnail chip, status tag and open link */
+.work {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.work-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px hsl(0 0% 1% / .08);
+
+    .thumb {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+        background: var(--surface);
+        color: var(--primary);
+
+        &.primary {
+            background: var(--primary);
+            color: #fff;
+        }
+    }
+
+    .work-main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+
+        .work-title {
+            font-size: .95rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        small {
+            font-size: .8rem;
+            color: var(--text-muted);
+        }
+    }
+}
+
+/* ========== 8.0 Student: Feedback Quote ========== */
+/* The latest feedback as one quote on a plain card */
+.feedback-card {
+    padding: 1.6rem 1.75rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px hsl(0 0% 1% / .08);
+
+    p {
+        font-size: 1rem;
+        font-weight: 300;
+        line-height: 1.7;
+    }
+
+    footer {
+        margin-top: .8rem;
+        font-size: .8rem;
+        color: var(--text-muted);
+    }
+
+    .link-btn {
+        margin-top: .9rem;
+        display: inline-block;
+    }
+}
+
+/* ========== 9.0 Student: Lists, Milestones and Tags ========== */
+/* Quiet rows separated by hairlines, used by milestones */
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--glass-border);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    >i {
+        font-size: 1.3rem;
+        color: var(--primary);
+    }
+
+    .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+        min-width: 0;
+
+        strong {
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        small {
+            font-size: .8rem;
+            color: var(--text-muted);
+        }
+    }
+}
+
+/* Status tags. Each one has text, so colour is never the only cue */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &.done {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    &.overdue {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+    }
+
+    &.soon {
+        border: 1px solid var(--accent);
+        color: var(--text);
+    }
+
+    &.upcoming {
+        background: var(--surface);
+        color: var(--text-muted);
+    }
+}
+
+/* Small text button used for uploads and open links */
+.link-btn {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+/* ========== 10.0 Student: Project ========== */
+/* The project page: title and summary, key facts, a stage stepper, objectives and scope */
+.project-head {
+    margin-bottom: 2rem;
+
+    .page-title {
+        max-width: 40rem;
+        line-height: 1.25;
+    }
+
+    .lead {
+        max-width: 40rem;
+    }
+}
+
+/* Key facts in a row, separated from the rest by a hairline */
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+
+    span {
+        font-size: .8rem;
+        color: var(--text-muted);
+    }
+
+    strong {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+/* Stage stepper: a line through a row of nodes, with a tick for done, yellow for current */
+.stepper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin-top: .5rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 17px;
+        left: 8%;
+        right: 8%;
+        height: 2px;
+        background: var(--surface);
+    }
+}
+
+.step {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+    text-align: center;
+
+    .node {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--surface);
+        border: 2px solid var(--surface);
+        font-size: 1rem;
+    }
+
+    .step-label {
+        font-size: .78rem;
+        color: var(--text-muted);
+    }
+
+    &.done .node {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    &.done .step-label {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    &.current .node {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+    }
+
+    &.current .step-label {
+        color: var(--text);
+        font-weight: 600;
+    }
+}
+
+/* Objectives: numbered rows, each number in NUST blue */
+.objectives {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        font-size: .95rem;
+        line-height: 1.6;
+    }
+
+    .num {
+        width: 26px;
+        height: 26px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--primary);
+        color: #fff;
+        font-size: .8rem;
+        font-weight: 700;
+    }
+}
+
+/* In and out of scope, side by side */
+.scope {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: .5rem;
+}
+
+.scope-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        font-size: .9rem;
+
+        i {
+            font-size: 1.1rem;
+        }
+
+        &.in i {
+            color: var(--primary);
+        }
+
+        &.out {
+            color: var(--text-muted);
+
+            i {
+                color: var(--text-muted);
+            }
+        }
+    }
+}
+
+/* ========== 11.0 Student: Feedback Thread ========== */
+/* The supervisor's feedback as a conversation: date dividers, message bubbles, and action items attached to each note */
+.thread-head {
+    margin-bottom: 2rem;
+}
+
+.thread {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+/* A date marker between groups of messages */
+.day-divider {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin: 1rem 0;
+    font-size: .75rem;
+    color: var(--text-muted);
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--glass-border);
+    }
+
+    span {
+        padding: .25rem .8rem;
+        border-radius: 999px;
+        background: var(--surface);
+    }
+}
+
+/* One supervisor message: avatar on the left, bubble and its actions on the right */
+.msg {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+    margin-bottom: 1.5rem;
+}
+
+.msg-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--grad-brand);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.msg-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+}
+
+/* The message bubble. The square corner at the top-left points back to the avatar */
+.bubble {
+    padding: 1rem 1.25rem;
+    border-radius: 4px 1.25rem 1.25rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px hsl(0 0% 1% / .06);
+    font-size: .95rem;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+/* Action items attached to the message, as a small checklist */
+.actions-card {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: .5rem;
+    border-radius: 1rem;
+    background: var(--glass-solid);
+    border: 1px solid var(--glass-border);
+}
+
+.act {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .6rem .7rem;
+    border-radius: .75rem;
+
+    i {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+    }
+
+    .act-text {
+        flex: 1;
+        font-size: .9rem;
+    }
+
+    small {
+        font-size: .78rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    &.done i {
+        color: var(--primary);
+    }
+
+    &.done .act-text {
+        color: var(--text-muted);
+    }
+
+    &.done small {
+        color: var(--primary);
+        font-weight: 600;
+    }
+}
+
+/* Small note at the foot of the thread about what the student can do */
+.thread-note {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: 1rem;
+    font-size: .8rem;
+    color: var(--text-muted);
+}
+
+/* ========== 12.0 Student: Documents Grid ========== */
+/* A grid of file cards, like a document library */
+.doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+
+/* The first tile starts a new upload, styled like a blank document tile */
+.doc-new {
+    min-height: 250px;
+    border-radius: 1.1rem;
+    border: 1.5px dashed var(--glass-border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .9rem;
+    transition: transform .2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+
+    .doc-new-plus {
+        width: 56px;
+        height: 56px;
+        font-size: 1.5rem;
+        color: var(--primary);
+    }
+
+    .doc-new-text {
+        font-size: .9rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+}
+
+/* A card with a page preview on top and the file details below */
+.doc-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px hsl(0 0% 1% / .08);
+    overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px hsl(0 0% 1% / .14);
+    }
+}
+
+/* The preview area: a tinted panel with a white page, like a document thumbnail */
+.doc-thumb {
+    position: relative;
+    height: 170px;
+    display: grid;
+    place-items: center;
+    background: hsl(var(--hue) 20% 90%);
+    padding: 1.5rem 0 0;
+}
+
+[data-theme="dark"] .doc-thumb {
+    background: hsl(var(--hue) 30% 18%);
+}
+
+.page {
+    width: 62%;
+    height: 86%;
+    padding: 14px 12px;
+    border-radius: 6px 6px 0 0;
+    background: #ffffff;
+    box-shadow: 0 6px 14px hsl(0 0% 0% / .12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.line {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: #dadee1;
+
+    &.w60 {
+        width: 60%;
+    }
+
+    &.w70 {
+        width: 70%;
+    }
+
+    &.w80 {
+        width: 80%;
+    }
+
+    &.w90 {
+        width: 90%;
+    }
+}
+
+/* File type badge, top-left of the preview */
+.type-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: .2rem .5rem;
+    border-radius: 6px;
+    background: var(--primary);
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+/* Name and version line, with the menu button on the right */
+.doc-meta {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .9rem 1rem .5rem;
+}
+
+.doc-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+
+    strong {
+        font-size: .9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    small {
+        font-size: .75rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.doc-more {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    transition: background .2s ease, color .2s ease;
+
+    &:hover {
+        background: var(--bg);
+        color: var(--primary);
+    }
+}
+
+.doc-foot {
+    padding: .25rem 1rem 1rem;
+}
+
+/* ========== 13.0 Student: Assistant Button and Panel ========== */
+/* Placeholder assistant, bottom right */
+.fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 90;
+    width: 58px;
+    height: 58px;
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.fab-panel {
+    position: fixed;
+    bottom: 6.5rem;
+    right: 2rem;
+    width: 280px;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    display: none;
+    z-index: 90;
+
+    &.open {
+        display: block;
+    }
+
+    h4 {
+        font-size: .95rem;
+        margin-bottom: .4rem;
+    }
+
+    p {
+        font-size: .85rem;
+        font-weight: 300;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+}
+
+/* ========== 14.0 Student: Toast ========== */
+/* Short message for things that switch on with the backend */
+.toast {
+    position: fixed;
+    bottom: 6.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    padding: .7rem 1.2rem;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-size: .85rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+    z-index: 100;
+
+    &.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========== 15.0 Student: Responsive ========== */
+/* On phones the sidebar becomes a bottom bar and the content takes the full width */
+@media (max-width: 860px) {
+    .dash-main {
+        margin-left: 0;
+        padding: 1.5rem 1.25rem 9rem;
+    }
+
+    .notif-panel {
+        right: 0;
+        width: 260px;
+    }
+
+    .fab {
+        bottom: 6.5rem;
+        right: 1.25rem;
+    }
+
+    .fab-panel {
+        bottom: 11.5rem;
+        right: 1.25rem;
+        width: calc(100% - 2.5rem);
+    }
+}
+
+@media (max-width: 700px) {
+    .banner {
+        min-height: 260px;
+    }
+
+    .slide {
+        grid-template-columns: 1fr;
+        padding: 1.75rem 1.5rem 3.25rem;
+    }
+
+    .slide-visual {
+        display: none;
+    }
+
+    .work-card {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 560px) {
+    .doc-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .doc-thumb {
+        height: 140px;
+    }
+}
+
+/* ========== 16.0 Student: Progress Circles ========== */
+/* The circle from the early skill tests, rebuilt with the same layers and shadows.
+   --glow sets the coloured rim as R G B, so each circle takes its colour from its status */
+.ring {
+    position: relative;
+    width: 140px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    container-type: inline-size;
+
+    /* Outer soft halo */
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: var(--bg);
+        opacity: .8;
+        box-shadow: 0px -2px 5px 1px rgba(255, 255, 255, .3),
+            0 2px 5px 1px rgba(0, 0, 0, 0.01),
+            inset 0px 2px 5px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Raised inner disc with the coloured glow along its bottom edge */
+    &::after {
+        content: '';
+        position: absolute;
+        background: var(--bg);
+        border-radius: 50%;
+        width: 70%;
+        aspect-ratio: 1 / 1;
+        box-shadow: 0 0 1em .6em rgb(var(--glow) / .12),
+            0 .5rem .8em 0 rgb(0 0 0 / .1),
+            inset 0 3px .01em rgba(255, 255, 255, .8),
+            inset 0 4px .03em rgba(0, 0, 0, 0.02),
+            inset 0 -2px 3px 0 rgb(var(--glow) / .35),
+            inset 0 -4px 4px .12em rgba(0, 0, 0, .04),
+            inset 0 -5px 0px .1em rgba(255, 255, 255, .02);
+    }
+}
+
+/* The number in the large circle, sized from the circle itself */
+.ring-value {
+    position: relative;
+    z-index: 10;
+    font-size: 22cqw;
+    font-weight: 100;
+    line-height: 1;
+    color: var(--text);
+
+    small {
+        font-size: 9cqw;
+        font-weight: 400;
+        opacity: .7;
+    }
+}
+
+/* Milestone summary at the top: the large circle beside the page title */
+.milestone-summary {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.25rem;
+
+    .page-title {
+        margin-bottom: .3rem;
+    }
+
+    .lead {
+        margin-bottom: 0;
+    }
+}
+
+/* One row per milestone: small circle, name and date, status tag, upload link */
+.milestone-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.mrow {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: .85rem 0;
+    border-bottom: 1px solid var(--glass-border);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+
+        strong {
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        small {
+            font-size: .8rem;
+            color: var(--text-muted);
+        }
+    }
+}
+
+@media (max-width: 560px) {
+    .milestone-summary {
+        gap: 1.25rem;
+    }
+
+    .ring {
+        width: 110px;
+    }
+}
+
+/* ========== 17.0 Student: Milestone Progress Rings ========== */
+/* Plain progress rings for each milestone: a thin arc filled to --pct, a flat centre, an icon in the middle */
+.progress-ring {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--ring-c) calc(var(--pct) * 1%), var(--surface) 0);
+
+    /* The flat centre that leaves a thin arc around the edge */
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: var(--bg);
+    }
+
+    i {
+        position: relative;
+        z-index: 1;
+        font-size: 1.1rem;
+        color: var(--ink, var(--text-muted));
+    }
+}
+
+/* ========== 18.0 Student: Feedback Checklist ========== */
+/* Action items are buttons the student can tick. The supervisor's note stays read-only */
+button.act {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    font: inherit;
+    color: var(--text);
+    cursor: pointer;
+    transition: background .2s ease;
+
+    &:hover {
+        background: var(--bg);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+    &.open:hover i {
+        color: var(--primary);
+    }
+
+    &.done .act-text {
+        text-decoration: line-through;
+        color: var(--text-muted);
+    }
+}

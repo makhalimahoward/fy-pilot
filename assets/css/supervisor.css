@@ -1,0 +1,880 @@
+/* ========== 1.0 Supervisor: Layout ========== */
+/* The content is centred in the space to the right of the sidebar */
+.dash-main {
+    margin-left: 8rem;
+    min-height: 100vh;
+    padding: 3rem 2rem 8rem;
+}
+
+.dash-inner {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.sidebar .nav-btn.active,
+.sidebar .nav-btn.active i {
+    color: var(--primary);
+}
+
+.view {
+    display: none;
+
+    &.active {
+        display: block;
+        animation: viewIn .5s var(--ease-out) both;
+    }
+}
+
+@keyframes viewIn {
+    from {
+        opacity: 0;
+        translate: 0 16px;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: .4rem;
+}
+
+.lead {
+    font-size: .95rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.section-label {
+    margin: 2.25rem 0 .9rem;
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+}
+
+/* ========== 2.0 Supervisor: Top Bar ========== */
+.topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+
+    .greet h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .greet p {
+        margin-top: .3rem;
+        font-size: .9rem;
+        font-weight: 300;
+        color: var(--text-muted);
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: .9rem;
+    }
+}
+
+.bell {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    color: var(--text);
+
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+        font-size: .68rem;
+        font-weight: 700;
+    }
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+}
+
+.profile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--grad-brand);
+    color: #fff;
+
+    i {
+        font-size: 1.25rem;
+    }
+}
+
+/* ========== 3.0 Supervisor: Overview Tiles ========== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.25rem 1.35rem;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 24px var(--shadow-dark);
+
+    i {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        font-size: 1.25rem;
+        color: var(--primary);
+        box-shadow: 2px 2px 4px var(--shadow-dark),
+            -2px -2px 4px var(--shadow-light);
+    }
+
+    strong {
+        display: block;
+        font-size: 1.45rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    span {
+        font-size: .8rem;
+        font-weight: 300;
+        opacity: .9;
+    }
+
+    &.primary {
+        background: var(--primary);
+        color: #fff;
+
+        i {
+            background: hsl(var(--hue) 100% 26%);
+            color: #fff;
+        }
+    }
+
+    &.accent {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+
+        i {
+            background: hsl(50 100% 62%);
+            color: hsl(var(--hue) 26% 12%);
+        }
+    }
+
+    &.light {
+        background: var(--surface);
+        color: var(--text);
+
+        i {
+            background: var(--accent);
+            color: hsl(var(--hue) 26% 12%);
+        }
+    }
+
+    &.glass {
+        background: var(--glass-solid);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: var(--text);
+
+        strong {
+            font-size: 1.05rem;
+        }
+    }
+
+    &.over {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+
+        i {
+            background: hsl(50 100% 62%);
+            color: hsl(var(--hue) 26% 12%);
+        }
+    }
+}
+
+/* ========== 4.0 Supervisor: Rows ========== */
+/* One row per student or submission: a progress circle, the name and project, and a status tag */
+.rows {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: .95rem .4rem;
+    border-bottom: 1px solid var(--glass-border);
+    cursor: pointer;
+    border-radius: .75rem;
+    transition: background .2s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: var(--bg);
+    }
+
+    .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+
+        strong {
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        small {
+            font-size: .8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .link-btn {
+        white-space: nowrap;
+    }
+}
+
+/* Plain progress circle used in rows: a thin arc filled to --pct, a flat centre with the value */
+.progress-ring {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--ring-c, var(--primary)) calc(var(--pct) * 1%), var(--surface) 0);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: var(--bg);
+    }
+
+    span {
+        position: relative;
+        z-index: 1;
+        font-size: .8rem;
+        font-weight: 600;
+    }
+
+    i {
+        position: relative;
+        z-index: 1;
+        font-size: 1.1rem;
+        color: var(--ink, var(--text-muted));
+    }
+}
+
+/* ========== 5.0 Supervisor: Tags and Buttons ========== */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &.done {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    &.overdue {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+    }
+
+    &.soon {
+        border: 1px solid var(--accent);
+        color: var(--text);
+    }
+
+    &.upcoming {
+        background: var(--surface);
+        color: var(--text-muted);
+    }
+
+    &.attention {
+        background: var(--accent);
+        color: hsl(var(--hue) 26% 12%);
+    }
+
+    &.ontrack {
+        background: var(--surface);
+        color: var(--text-muted);
+    }
+}
+
+.link-btn {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform .2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.btn-small {
+    padding: .55rem 1rem;
+    font-size: .8rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: 1.5rem;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* ========== 6.0 Supervisor: Progress Circle (reference style) ========== */
+/* The circle from the early skill tests, used for the student's overall progress */
+.ring {
+    position: relative;
+    width: 130px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    container-type: inline-size;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: var(--bg);
+        opacity: .8;
+        box-shadow: 0px -2px 5px 1px rgba(255, 255, 255, .3),
+            0 2px 5px 1px rgba(0, 0, 0, 0.01),
+            inset 0px 2px 5px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        background: var(--bg);
+        border-radius: 50%;
+        width: 70%;
+        aspect-ratio: 1 / 1;
+        box-shadow: 0 0 1em .6em rgb(var(--glow) / .12),
+            0 .5rem .8em 0 rgb(0 0 0 / .1),
+            inset 0 3px .01em rgba(255, 255, 255, .8),
+            inset 0 4px .03em rgba(0, 0, 0, 0.02),
+            inset 0 -2px 3px 0 rgb(var(--glow) / .35),
+            inset 0 -3px 0px .01em rgba(255, 255, 255, .02);
+    }
+}
+
+.ring-value {
+    position: relative;
+    z-index: 10;
+    font-size: 22cqw;
+    font-weight: 100;
+    line-height: 1;
+    color: var(--text);
+
+    small {
+        font-size: 9cqw;
+        font-weight: 400;
+        opacity: .7;
+    }
+}
+
+/* ========== 7.0 Supervisor: Student Workspace ========== */
+.ws-head {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    .ws-text .page-title {
+        margin-bottom: .3rem;
+    }
+
+    .ws-text .lead {
+        margin-bottom: .9rem;
+    }
+}
+
+/* Tabs across the top of the workspace, with the active one underlined in NUST blue */
+.tabs {
+    display: flex;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: .6rem 0;
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+
+    &.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+        font-weight: 600;
+    }
+}
+
+.tab-panel {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+
+    span {
+        font-size: .8rem;
+        color: var(--text-muted);
+    }
+
+    strong {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+/* ========== 8.0 Supervisor: Documents Review ========== */
+.review-actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.comment-box {
+    display: none;
+    width: 100%;
+    margin-top: .6rem;
+    flex-direction: column;
+    gap: .5rem;
+
+    &.open {
+        display: flex;
+    }
+
+    textarea {
+        width: 100%;
+        padding: .7rem .9rem;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        font: inherit;
+        font-size: .9rem;
+        color: var(--text);
+        background: var(--surface);
+        box-shadow: inset 2px 2px 4px var(--shadow-dark),
+            inset -2px -2px 4px var(--shadow-light);
+        resize: vertical;
+    }
+
+    .comment-send {
+        align-self: flex-end;
+    }
+}
+
+/* ========== 9.0 Supervisor: Session Thread ========== */
+.thread {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.day-divider {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin: 1rem 0;
+    font-size: .75rem;
+    color: var(--text-muted);
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--glass-border);
+    }
+
+    span {
+        padding: .25rem .8rem;
+        border-radius: 999px;
+        background: var(--surface);
+    }
+}
+
+.msg {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+    margin-bottom: 1.25rem;
+}
+
+.msg-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--grad-brand);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.msg-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.bubble {
+    padding: 1rem 1.25rem;
+    border-radius: 4px 1.25rem 1.25rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px hsl(0 0% 1% / .06);
+    font-size: .95rem;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+.actions-card {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: .5rem .6rem;
+    border-radius: 1rem;
+    background: var(--glass-solid);
+    border: 1px solid var(--glass-border);
+}
+
+.act {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .55rem .6rem;
+    font-size: .9rem;
+
+    i {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+    }
+
+    .act-text {
+        flex: 1;
+    }
+
+    small {
+        font-size: .78rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    &.done i {
+        color: var(--primary);
+    }
+}
+
+.thread-note {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: 1rem;
+    font-size: .8rem;
+    color: var(--text-muted);
+}
+
+/* ========== 10.0 Supervisor: Log Session Drawer ========== */
+/* A panel that slides in from the right over the workspace */
+.drawer-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    justify-content: flex-end;
+    background: hsl(var(--hue) 30% 10% / .4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+
+    &.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .drawer {
+        width: min(440px, 100%);
+        height: 100%;
+        overflow-y: auto;
+        padding: 2rem 2rem 2.5rem;
+        border-radius: 0;
+        border-left: 1px solid var(--glass-border);
+        transform: translateX(100%);
+        transition: transform .45s var(--ease-out);
+    }
+
+    &.open .drawer {
+        transform: translateX(0);
+    }
+}
+
+.drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .close {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        color: var(--text);
+    }
+}
+
+.log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+        font-size: .8rem;
+        font-weight: 500;
+        color: var(--text);
+    }
+
+    input,
+    textarea {
+        padding: .75rem .9rem;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        font: inherit;
+        font-size: .9rem;
+        font-weight: 400;
+        color: var(--text);
+        background: var(--surface);
+        box-shadow: inset 2px 2px 4px var(--shadow-dark),
+            inset -2px -2px 4px var(--shadow-light);
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .submit {
+        width: 100%;
+        margin-top: .4rem;
+    }
+}
+
+.action-builder {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.field-title {
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.action-input {
+    display: grid;
+    grid-template-columns: 1fr 130px auto;
+    gap: .5rem;
+    align-items: center;
+}
+
+.action-preview {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+
+    li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: .6rem;
+        padding: .5rem .75rem;
+        border-radius: .75rem;
+        background: var(--surface);
+        font-size: .85rem;
+
+        small {
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+    }
+}
+
+/* ========== 11.0 Supervisor: Toast ========== */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    padding: .7rem 1.2rem;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-size: .85rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+    z-index: 300;
+
+    &.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========== 12.0 Supervisor: Responsive ========== */
+@media (max-width: 860px) {
+    .dash-main {
+        margin-left: 0;
+        padding: 1.5rem 1.25rem 9rem;
+    }
+
+    .ws-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .ring {
+        width: 110px;
+    }
+
+    .action-input {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========== 13.0 Supervisor: Small Supporting Styles ========== */
+/* Secondary button used for Request changes */
+.btn.ghost {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 3px 3px 6px var(--shadow-dark),
+        -3px -3px 6px var(--shadow-light);
+}
+
+/* Document icon at the start of a review row */
+.doc-icon {
+    font-size: 1.3rem;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+/* Document rows can wrap so the comment box sits on its own line */
+.row.doc {
+    flex-wrap: wrap;
+
+    .comment-box {
+        flex-basis: 100%;
+    }
+}
