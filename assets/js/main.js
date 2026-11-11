@@ -67,8 +67,8 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ========== 5.0 Domain Checks ==========
-// Students must use the student domain, staff the staff domain. Anything else is refused here
-// and again in the database trigger
+// Students must use the student domain. Staff and coordinators must use the staff domain.
+// The database trigger checks again, so the browser check is only a convenience
 function isNustEmail(email) {
   return email.endsWith(STUDENT_DOMAIN) || email.endsWith(STAFF_DOMAIN);
 }
@@ -127,7 +127,7 @@ signupForm.addEventListener("submit", async (e) => {
       msgSignup,
       role === "student"
         ? `Students use ${STUDENT_DOMAIN}`
-        : `Staff use ${STAFF_DOMAIN}`,
+        : `Staff and coordinators use ${STAFF_DOMAIN}`,
       true,
     );
     return;
@@ -138,7 +138,11 @@ signupForm.addEventListener("submit", async (e) => {
     email,
     password: signupPassword.value,
     options: {
-      data: { full_name: signupName.value.trim() },
+      // requested_role is read by the database trigger. The database decides the final role
+      data: {
+        full_name: signupName.value.trim(),
+        requested_role: role,
+      },
       emailRedirectTo: returnAddress(),
     },
   });
