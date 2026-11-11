@@ -1,138 +1,465 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
-    <!-- ========== 1.0 Meta ========== -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FYPilot - Student</title>
+  <!-- ========== 1.0 Meta ========== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FYPilot - Student</title>
 
-    <!-- Inline SVG favicon: no file or library needed -->
-    <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%230066B3'/%3E%3Ccircle cx='12' cy='12' r='4' fill='%23FFD500'/%3E%3C/svg%3E">
+  <!-- Inline SVG favicon: no file or library needed -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%230066B3'/%3E%3Ccircle cx='12' cy='12' r='4' fill='%23FFD500'/%3E%3C/svg%3E">
 
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/student.css">
-    <link rel="stylesheet" href="assets/css/extras.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/student.css">
 </head>
-
 <body>
-    <!-- ========== 2.0 Sidebar ========== -->
-    <aside class="sidebar glass">
-        <a href="student.html" class="brand">
-            <i class="ri-compass-3-line"></i>
-            <span><em>FYP</em>ilot</span>
-        </a>
+  <!-- ========== 2.0 Sidebar ========== -->
+  <aside class="sidebar glass">
+    <a href="student.html" class="brand">
+      <i class="ri-compass-3-line"></i>
+      <span><em>FYP</em>ilot</span>
+    </a>
 
-        <nav class="nav-links">
-            <button class="nav-btn active" data-section="dashboard"><i
-                    class="ri-home-5-line"></i><span>Home</span></button>
-            <button class="nav-btn" data-section="topics"><i class="ri-lightbulb-line"></i><span>Topics</span></button>
-            <button class="nav-btn" data-section="project"><i
-                    class="ri-folder-open-line"></i><span>Project</span></button>
-            <button class="nav-btn" data-section="milestones"><i
-                    class="ri-flag-line"></i><span>Milestones</span></button>
-            <button class="nav-btn" data-section="feedback"><i
-                    class="ri-chat-quote-line"></i><span>Feedback</span></button>
-            <button class="nav-btn" data-section="documents"><i
-                    class="ri-file-text-line"></i><span>Documents</span></button>
-            <button class="nav-btn" id="logoutBtn"><i class="ri-logout-box-r-line"></i><span>Log out</span></button>
-        </nav>
+    <nav class="nav-links">
+      <button class="nav-btn active" data-section="dashboard"><i class="ri-home-5-line"></i><span>Home</span></button>
+      <button class="nav-btn" data-section="project"><i class="ri-folder-open-line"></i><span>Project</span></button>
+      <button class="nav-btn" data-section="milestones"><i class="ri-flag-line"></i><span>Milestones</span></button>
+      <button class="nav-btn" data-section="feedback"><i class="ri-chat-quote-line"></i><span>Feedback</span></button>
+      <button class="nav-btn" data-section="documents"><i class="ri-file-text-line"></i><span>Documents</span></button>
+      <button class="nav-btn" id="logoutBtn"><i class="ri-logout-box-r-line"></i><span>Log out</span></button>
+    </nav>
 
-        <button class="theme-btn neu neu-circle" id="themeToggle" aria-label="Toggle theme">
-            <i class="ri-moon-line"></i>
-        </button>
-    </aside>
-
-    <!-- ========== 3.0 Main Area (centred beside the sidebar) ========== -->
-    <main class="dash-main">
-        <div class="dash-inner">
-
-            <!-- ========== 3.1 Top Bar ========== -->
-            <header class="topline">
-                <div class="greet">
-                    <h2 id="pageTitle">Dashboard</h2>
-                    <p id="todayLine"></p>
-                </div>
-
-                <div class="actions">
-                    <button class="bell neu neu-circle" id="bellBtn" aria-label="Notifications">
-                        <i class="ri-notification-3-line"></i>
-                        <span class="badge" id="bellBadge" style="display:none">0</span>
-                    </button>
-                    <div class="notif-panel glass" id="notifPanel">
-                        <h4>Notifications</h4>
-                    </div>
-                    <div class="avatar neu neu-circle">
-                        <div class="profile-icon"><i class="ri-user-smile-line"></i></div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- ========== 4.0 Home ========== -->
-            <section class="view active" id="dashboard">
-                <div class="banner" id="banner"></div>
-
-                <p class="section-label">Overview</p>
-                <div class="stats" id="homeStats"></div>
-
-                <p class="section-label">Your work</p>
-                <ul class="work" id="workList"></ul>
-
-                <p class="section-label">Latest feedback</p>
-                <div id="latestFeedback"></div>
-            </section>
-
-            <!-- ========== 4.5 Topics ========== -->
-            <section class="view" id="topics">
-                <h3 class="page-title">Project topics</h3>
-                <p class="lead" id="topicsLead"></p>
-                <div id="myPicks"></div>
-                <ul class="rows" id="topicRows" style="margin-top:1rem"></ul>
-            </section>
-
-            <!-- ========== 5.0 Project ========== -->
-            <section class="view" id="project">
-                <div id="projectBody"></div>
-            </section>
-
-            <!-- ========== 6.0 Milestones ========== -->
-            <section class="view" id="milestones">
-                <div id="milestoneBody"></div>
-            </section>
-
-            <!-- ========== 7.0 Feedback ========== -->
-            <section class="view" id="feedback">
-                <div id="feedbackBody"></div>
-            </section>
-
-            <!-- ========== 8.0 Documents ========== -->
-            <section class="view" id="documents">
-                <h3 class="page-title">Documents</h3>
-                <input type="file" id="fileInput" class="sr-file" aria-label="Choose a file to upload">
-                <div class="doc-grid" id="docGrid"></div>
-            </section>
-
-        </div>
-    </main>
-
-    <!-- ========== 9.0 Assistant (placeholder) ========== -->
-    <button class="fab neu neu-circle" id="fabBtn" aria-label="Assistant">
-        <i class="ri-sparkling-2-line"></i>
+    <button class="theme-btn neu neu-circle" id="themeToggle" aria-label="Toggle theme">
+      <i class="ri-moon-line"></i>
     </button>
+  </aside>
 
-    <div class="fab-panel glass" id="fabPanel">
-        <h4>Assistant</h4>
-        <p>The assistant is planned as a later addition. It will suggest what to do next.</p>
+  <!-- ========== 3.0 Main Area (centred beside the sidebar) ========== -->
+  <main class="dash-main">
+    <div class="dash-inner">
+
+      <!-- ========== 3.1 Top Bar ========== -->
+      <header class="topline">
+        <div class="greet">
+          <h2>Dashboard</h2>
+          <p>Sunday, 1 November 2026</p>
+        </div>
+
+        <div class="actions">
+          <button class="bell neu neu-circle" id="bellBtn" aria-label="Notifications">
+            <i class="ri-notification-3-line"></i>
+            <span class="badge">2</span>
+          </button>
+          <div class="notif-panel glass" id="notifPanel">
+            <h4>Notifications</h4>
+            <div class="notif-item">
+              <strong>New feedback</strong>
+              <small>Dr. A. Ndlovu · 28 Oct</small>
+            </div>
+            <div class="notif-item">
+              <strong>Prototype demo is overdue</strong>
+              <small>31 Oct</small>
+            </div>
+          </div>
+          <div class="avatar neu neu-circle">
+            <div class="profile-icon"><i class="ri-user-smile-line"></i></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ========== 4.0 Home ========== -->
+      <section class="view active" id="dashboard">
+
+        <!-- Greeting banner: a three-slide carousel, icon visuals on the NUST gradient -->
+        <div class="banner" id="banner">
+          <div class="slide active">
+            <div class="slide-text">
+              <p class="eyebrow">Hi, Howard</p>
+              <h3>Next up: Requirements and design</h3>
+              <p>Due 3 Nov 2026 · 3 days left</p>
+              <button class="banner-btn" data-go="milestones">View milestones <i class="ri-arrow-right-line"></i></button>
+            </div>
+            <div class="slide-visual"><i class="ri-time-line"></i></div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-text">
+              <p class="eyebrow">Your progress</p>
+              <h3>33% complete</h3>
+              <p>2 of 6 milestones are done. Keep the momentum going.</p>
+              <button class="banner-btn" data-go="milestones">See milestones <i class="ri-arrow-right-line"></i></button>
+            </div>
+            <div class="slide-visual"><i class="ri-line-chart-line"></i></div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-text">
+              <p class="eyebrow">New feedback</p>
+              <h3>Dr. A. Ndlovu left a note</h3>
+              <p>Tighten the objectives so each one is measurable.</p>
+              <button class="banner-btn" data-go="feedback">Read feedback <i class="ri-arrow-right-line"></i></button>
+            </div>
+            <div class="slide-visual"><i class="ri-chat-quote-line"></i></div>
+          </div>
+
+          <div class="dots">
+            <button class="dot-btn active" data-slide="0" aria-label="Slide 1"></button>
+            <button class="dot-btn" data-slide="1" aria-label="Slide 2"></button>
+            <button class="dot-btn" data-slide="2" aria-label="Slide 3"></button>
+          </div>
+        </div>
+
+        <!-- Overview tiles -->
+        <p class="section-label">Overview</p>
+        <div class="stats">
+          <div class="stat primary">
+            <i class="ri-line-chart-line neu neu-circle"></i>
+            <div>
+              <strong>33%</strong>
+              <span>Progress · 2 of 6</span>
+            </div>
+          </div>
+
+          <div class="stat accent">
+            <i class="ri-calendar-event-line neu neu-circle"></i>
+            <div>
+              <strong>3 Nov</strong>
+              <span>Next deadline</span>
+            </div>
+          </div>
+
+          <div class="stat light">
+            <i class="ri-error-warning-line neu neu-circle"></i>
+            <div>
+              <strong>1</strong>
+              <span>Overdue milestone</span>
+            </div>
+          </div>
+
+          <div class="stat glass">
+            <i class="ri-user-star-line neu neu-circle"></i>
+            <div>
+              <strong>Dr. A. Ndlovu</strong>
+              <span>Supervisor</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Work list -->
+        <p class="section-label">Your work</p>
+        <ul class="work">
+          <li class="work-card">
+            <span class="thumb primary"><i class="ri-flag-line"></i></span>
+            <div class="work-main">
+              <a class="work-title">Prototype demo</a>
+              <small>Due 20 Oct 2026</small>
+            </div>
+            <span class="tag overdue">Overdue</span>
+            <button class="link-btn" data-go="milestones">Open</button>
+          </li>
+
+          <li class="work-card">
+            <span class="thumb"><i class="ri-time-line"></i></span>
+            <div class="work-main">
+              <a class="work-title">Requirements and design</a>
+              <small>Due 3 Nov 2026</small>
+            </div>
+            <span class="tag soon">Due soon</span>
+            <button class="link-btn" data-go="milestones">Open</button>
+          </li>
+
+          <li class="work-card">
+            <span class="thumb"><i class="ri-checkbox-circle-line"></i></span>
+            <div class="work-main">
+              <a class="work-title">Make the objectives measurable</a>
+              <small>Action from 28 Oct · due 4 Nov 2026</small>
+            </div>
+            <span class="tag soon">Action</span>
+            <button class="link-btn" data-go="feedback">Open</button>
+          </li>
+        </ul>
+
+        <!-- Latest feedback -->
+        <p class="section-label">Latest feedback</p>
+        <div class="feedback-card">
+          <p>Tighten the objectives so each one is measurable. Add a sequence diagram before the next review.</p>
+          <footer>Dr. A. Ndlovu · 28 Oct 2026</footer>
+          <button class="link-btn" data-go="feedback">Read all feedback</button>
+        </div>
+      </section>
+
+      <!-- ========== 5.0 Project ========== -->
+      <section class="view" id="project">
+        <div class="project-head">
+          <h3 class="page-title">Web Based Final Year Project Supervision and Progress Monitoring System</h3>
+          <p class="lead">A shared record for allocations, supervision sessions, milestones and documents, so students, supervisors and the coordinator work from the same information.</p>
+        </div>
+
+        <div class="facts">
+          <div>
+            <span>Supervisor</span>
+            <strong>Dr. A. Ndlovu</strong>
+          </div>
+          <div>
+            <span>Started</span>
+            <strong>1 Sep 2026</strong>
+          </div>
+          <div>
+            <span>Final submission</span>
+            <strong>14 Dec 2026</strong>
+          </div>
+        </div>
+
+        <h4 class="block-title">Stage</h4>
+        <ol class="stepper">
+          <li class="step done"><span class="node"><i class="ri-check-line"></i></span><span class="step-label">Proposal</span></li>
+          <li class="step done"><span class="node"><i class="ri-check-line"></i></span><span class="step-label">Literature review</span></li>
+          <li class="step current"><span class="node"><i class="ri-time-line"></i></span><span class="step-label">Design</span></li>
+          <li class="step"><span class="node"></span><span class="step-label">Build</span></li>
+          <li class="step"><span class="node"></span><span class="step-label">Testing</span></li>
+          <li class="step"><span class="node"></span><span class="step-label">Final report</span></li>
+        </ol>
+
+        <h4 class="block-title">Objectives</h4>
+        <ol class="objectives">
+          <li><span class="num">1</span><span>Allocate each student to a supervisor and a project, with the details recorded in one place.</span></li>
+          <li><span class="num">2</span><span>Record every supervision session, feedback note and action item against the student.</span></li>
+          <li><span class="num">3</span><span>Track milestones and deadlines, and flag anything overdue as it happens.</span></li>
+          <li><span class="num">4</span><span>Give the coordinator a view of progress across all projects, with reports they can export.</span></li>
+        </ol>
+
+        <div class="scope">
+          <div>
+            <h4 class="block-title">In scope</h4>
+            <ul class="scope-list">
+              <li class="in"><i class="ri-checkbox-circle-line"></i> Allocations and project details</li>
+              <li class="in"><i class="ri-checkbox-circle-line"></i> Sessions, feedback and action items</li>
+              <li class="in"><i class="ri-checkbox-circle-line"></i> Milestones, deadlines and documents</li>
+              <li class="in"><i class="ri-checkbox-circle-line"></i> Coordinator reports, PDF and CSV</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="block-title">Out of scope</h4>
+            <ul class="scope-list">
+              <li class="out"><i class="ri-close-circle-line"></i> Plagiarism checking</li>
+              <li class="out"><i class="ri-close-circle-line"></i> Grading</li>
+              <li class="out"><i class="ri-close-circle-line"></i> Video calls</li>
+              <li class="out"><i class="ri-close-circle-line"></i> AI features</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 6.0 Milestones ========== -->
+      <section class="view" id="milestones">
+        <div class="milestone-summary">
+          <div class="ring" style="--glow: 0 153 230;">
+            <span class="ring-value">33<small>%</small></span>
+          </div>
+          <div class="summary-text">
+            <h3 class="page-title">Milestones</h3>
+            <p class="lead">2 of 6 complete · next due 3 Nov 2026</p>
+          </div>
+        </div>
+
+        <ul class="milestone-list">
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 100; --ring-c: var(--primary); --ink: var(--primary);"><i class="ri-check-line"></i></span>
+            <div class="main"><strong>Proposal submitted</strong><small>Due 10 Sep 2026</small></div>
+            <span class="tag done">Complete</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 100; --ring-c: var(--primary); --ink: var(--primary);"><i class="ri-check-line"></i></span>
+            <div class="main"><strong>Literature review</strong><small>Due 1 Oct 2026</small></div>
+            <span class="tag done">Complete</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 100; --ring-c: var(--accent); --ink: var(--text);"><i class="ri-error-warning-line"></i></span>
+            <div class="main"><strong>Prototype demo</strong><small>Due 20 Oct 2026</small></div>
+            <span class="tag overdue">Overdue</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 50; --ring-c: var(--accent); --ink: var(--text);"><i class="ri-time-line"></i></span>
+            <div class="main"><strong>Requirements and design</strong><small>Due 3 Nov 2026</small></div>
+            <span class="tag soon">Due soon</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 0; --ring-c: var(--text-muted); --ink: var(--text-muted);"><i class="ri-circle-line"></i></span>
+            <div class="main"><strong>Final report draft</strong><small>Due 30 Nov 2026</small></div>
+            <span class="tag upcoming">Upcoming</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+          <li class="mrow">
+            <span class="progress-ring" style="--pct: 0; --ring-c: var(--text-muted); --ink: var(--text-muted);"><i class="ri-circle-line"></i></span>
+            <div class="main"><strong>Final submission</strong><small>Due 14 Dec 2026</small></div>
+            <span class="tag upcoming">Upcoming</span>
+            <button class="link-btn" data-go="documents">Upload</button>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ========== 7.0 Feedback ========== -->
+      <section class="view" id="feedback">
+        <div class="thread-head">
+          <h3 class="page-title">Feedback</h3>
+          <p class="lead">Dr. A. Ndlovu · <span id="openCount">2 open actions</span></p>
+        </div>
+
+        <div class="thread">
+          <div class="day-divider"><span>28 Oct 2026</span></div>
+
+          <div class="msg">
+            <div class="msg-avatar">AN</div>
+            <div class="msg-body">
+              <div class="bubble">Tighten the objectives so each one is measurable. Add a sequence diagram for the session flow before the next review.</div>
+              <div class="actions-card">
+                <button class="act open" type="button" aria-pressed="false" data-due="Due 4 Nov">
+                  <i class="ri-checkbox-blank-circle-line"></i>
+                  <span class="act-text">Make the objectives measurable</span>
+                  <small>Due 4 Nov</small>
+                </button>
+                <button class="act open" type="button" aria-pressed="false" data-due="Due 7 Nov">
+                  <i class="ri-checkbox-blank-circle-line"></i>
+                  <span class="act-text">Add a sequence diagram for the session flow</span>
+                  <small>Due 7 Nov</small>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="day-divider"><span>14 Oct 2026</span></div>
+
+          <div class="msg">
+            <div class="msg-avatar">AN</div>
+            <div class="msg-body">
+              <div class="bubble">Good progress on the literature review. Add three recent studies on allocation systems so the related work is current.</div>
+              <div class="actions-card">
+                <button class="act done" type="button" aria-pressed="true" data-due="Done">
+                  <i class="ri-checkbox-circle-fill"></i>
+                  <span class="act-text">Add three recent studies on allocation systems</span>
+                  <small>Done</small>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="thread-note"><i class="ri-lock-line"></i> Supervisor notes are read-only. Tick an action when it is done.</p>
+      </section>
+
+      <!-- ========== 8.0 Documents ========== -->
+      <section class="view" id="documents">
+        <h3 class="page-title">Documents</h3>
+
+        <div class="doc-grid">
+          <button class="doc-new" data-toast="Uploads switch on with the backend">
+            <span class="doc-new-plus neu neu-circle"><i class="ri-add-line"></i></span>
+            <span class="doc-new-text">Upload new version</span>
+          </button>
+
+          <article class="doc-card">
+            <div class="doc-thumb">
+              <span class="type-badge">PDF</span>
+              <div class="page">
+                <span class="line w80"></span>
+                <span class="line w60"></span>
+                <span class="line w90"></span>
+                <span class="line w70"></span>
+              </div>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-text">
+                <strong>proposal_v2.pdf</strong>
+                <small>Proposal · Version 2 · 9 Sep</small>
+              </div>
+              <button class="doc-more" aria-label="More options"><i class="ri-more-2-fill"></i></button>
+            </div>
+            <div class="doc-foot"><span class="tag done">Approved</span></div>
+          </article>
+
+          <article class="doc-card">
+            <div class="doc-thumb">
+              <span class="type-badge">DOCX</span>
+              <div class="page">
+                <span class="line w90"></span>
+                <span class="line w80"></span>
+                <span class="line w60"></span>
+                <span class="line w90"></span>
+              </div>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-text">
+                <strong>lit_review_v3.docx</strong>
+                <small>Literature review · Version 3 · 30 Sep</small>
+              </div>
+              <button class="doc-more" aria-label="More options"><i class="ri-more-2-fill"></i></button>
+            </div>
+            <div class="doc-foot"><span class="tag done">Approved</span></div>
+          </article>
+
+          <article class="doc-card">
+            <div class="doc-thumb">
+              <span class="type-badge">PDF</span>
+              <div class="page">
+                <span class="line w70"></span>
+                <span class="line w90"></span>
+                <span class="line w60"></span>
+                <span class="line w80"></span>
+              </div>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-text">
+                <strong>requirements_v1.pdf</strong>
+                <small>Requirements and design · Version 1 · 29 Oct</small>
+              </div>
+              <button class="doc-more" aria-label="More options"><i class="ri-more-2-fill"></i></button>
+            </div>
+            <div class="doc-foot"><span class="tag soon">Changes requested</span></div>
+          </article>
+
+          <article class="doc-card">
+            <div class="doc-thumb">
+              <span class="type-badge">ZIP</span>
+              <div class="page">
+                <span class="line w60"></span>
+                <span class="line w80"></span>
+                <span class="line w70"></span>
+                <span class="line w90"></span>
+              </div>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-text">
+                <strong>prototype_draft.zip</strong>
+                <small>Prototype demo · Version 1 · 19 Oct</small>
+              </div>
+              <button class="doc-more" aria-label="More options"><i class="ri-more-2-fill"></i></button>
+            </div>
+            <div class="doc-foot"><span class="tag upcoming">Pending review</span></div>
+          </article>
+        </div>
+      </section>
+
     </div>
+  </main>
 
-    <!-- ========== 10.0 Toast ========== -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <!-- ========== 9.0 Assistant (placeholder) ========== -->
+  <button class="fab neu neu-circle" id="fabBtn" aria-label="Assistant">
+    <i class="ri-sparkling-2-line"></i>
+  </button>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="assets/js/api.js" defer></script>
-    <script src="assets/js/student.js" defer></script>
+  <div class="fab-panel glass" id="fabPanel">
+    <h4>Assistant</h4>
+    <p>The assistant will suggest what to do next. It is switched on once the backend is connected.</p>
+  </div>
+
+  <!-- ========== 10.0 Toast ========== -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/student.js" defer></script>
 </body>
-
 </html>

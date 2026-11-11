@@ -150,7 +150,6 @@
         height: 40px;
         display: grid;
         place-items: center;
-        border-radius: 50%;
         font-size: 1.25rem;
         color: var(--primary);
         box-shadow: 2px 2px 4px var(--shadow-dark),

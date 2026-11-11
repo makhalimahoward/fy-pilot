@@ -194,3 +194,11 @@
 .auth-msg.error {
     color: #c0392b;
 }
+
+/* Landing: the sign-in and sign-up forms fill their half of the modal */
+.auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+}
