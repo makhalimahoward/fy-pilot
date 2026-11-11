@@ -202,3 +202,43 @@
     flex-direction: column;
     gap: .85rem;
 }
+
+/* Each field is a label stacked above its input, full width */
+.auth-form label {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    width: 100%;
+    text-align: left;
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* Inputs are neuglass wells: inset shadow, no hard border */
+.auth-form input {
+    width: 100%;
+    padding: .8rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 400;
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+}
+
+.auth-form input:focus {
+    box-shadow: inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light),
+                0 0 0 2px var(--primary);
+}
+
+/* The submit button spans the form */
+.auth-form .submit {
+    width: 100%;
+    margin-top: .3rem;
+}
