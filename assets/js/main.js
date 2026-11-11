@@ -43,15 +43,10 @@ function say(box, text, isError = false) {
 }
 
 // ========== 4.0 Event Wiring ==========
+// The buttons always open the form. A session that already exists is not used to skip it,
+// so a person can always log in as someone else. Log out clears the session
 document.querySelectorAll("[data-open]").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    // Someone already signed in goes straight to their dashboard
-    const {
-      data: { session },
-    } = await FYP.sb.auth.getSession();
-    if (session) return routeByRole();
-    openAuth(btn.dataset.open);
-  });
+  btn.addEventListener("click", () => openAuth(btn.dataset.open));
 });
 document
   .querySelectorAll(".side-btn")
