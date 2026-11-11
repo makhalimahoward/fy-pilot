@@ -173,14 +173,18 @@ async function routeByRole() {
 }
 
 // ========== 9.0 Confirmation Links ==========
-// When someone opens the confirmation link, Supabase puts the session in the address.
-// Pick it up, then route them to their dashboard
+// Opening the confirmation link confirms the email but must not log the person in.
+// The session the link creates is signed out, the address is cleaned up, and the login form
+// opens with a message. The person then logs in with their email and password
 if (window.location.hash.includes("access_token")) {
-  openAuth("login");
-  say(msgLogin, "Finishing sign-in…");
-  FYP.sb.auth.onAuthStateChange((event, session) => {
-    if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
-      routeByRole();
-    }
+  let handled = false;
+  FYP.sb.auth.onAuthStateChange(async (event, session) => {
+    if (handled || !session) return;
+    if (event !== "SIGNED_IN" && event !== "INITIAL_SESSION") return;
+    handled = true;
+    await FYP.sb.auth.signOut();
+    history.replaceState(null, "", window.location.pathname);
+    openAuth("login");
+    say(msgLogin, "Email confirmed. Log in with your email and password.");
   });
 }
