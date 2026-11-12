@@ -1821,3 +1821,38 @@ body.no-project .fab,
 body.no-project .fab-panel {
     display: none;
 }
+
+/* ========== 19.0 Student: Placeholder Cards ========== */
+/* Shown where data will appear once it exists, such as sessions before the first meeting */
+.placeholder-card {
+    padding: 2.2rem 2rem;
+    border-radius: var(--radius);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    background: var(--glass-solid);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    i {
+        font-size: 2.2rem;
+        color: var(--primary);
+        margin-bottom: .3rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    p {
+        max-width: 30rem;
+        font-size: .9rem;
+        font-weight: 300;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+}
