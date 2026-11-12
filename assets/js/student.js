@@ -50,12 +50,12 @@ function toggleFab() {
 
 // ========== 6.0 Toast ==========
 // Student only: short message for actions that need the backend
-let toastTimer;
+let pageToastTimer;
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  clearTimeout(pageToastTimer);
+  pageToastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
 }
 
 // ========== 7.0 Event Wiring ==========
