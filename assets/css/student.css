@@ -306,90 +306,78 @@
 }
 
 /* ========== 6.0 Student: Overview Tiles ========== */
-/* Four tiles in the NUST palette, each with an icon chip and a value */
+/* Neuglass tiles on the page colour, with no coloured boxes. Only the text colour changes between tiles */
+:root {
+    --tile-blue: #0066B3;
+    --tile-sky: #0096D6;
+    --tile-gold: #A67C00;
+}
+
+[data-theme="dark"] {
+    --tile-blue: hsl(205 100% 62%);
+    --tile-sky: hsl(197 100% 62%);
+    --tile-gold: hsl(50 100% 60%);
+}
+
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.5rem;
 }
 
 .stat {
+    --tile: var(--text);
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
-    padding: 1.25rem 1.35rem;
-    border-radius: var(--radius);
-    box-shadow: 0 10px 24px var(--shadow-dark);
+    gap: .9rem;
+    padding: 1.5rem 1.4rem;
+    border-radius: 1.6rem;
+    background: var(--bg);
+    box-shadow: 8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
 
-    /* Icon chips are neuglass (the neu classes come from the HTML). The shadow is scaled down,
-     because the full neu shadow is built for large surfaces and makes a 40px chip look ringed */
+    /* Round neuglass icon button, with the icon in the tile colour */
     i {
-        width: 40px;
-        height: 40px;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
         display: grid;
         place-items: center;
-        font-size: 1.25rem;
-        color: var(--primary);
-        border: none;
-        box-shadow: 2px 2px 4px var(--shadow-dark),
-            -2px -2px 4px var(--shadow-light);
+        font-size: 1.2rem;
+        color: var(--tile);
+        background: var(--bg);
+        box-shadow: 3px 3px 6px var(--shadow-dark),
+            -3px -3px 6px var(--shadow-light);
     }
 
     strong {
         display: block;
-        font-size: 1.45rem;
+        font-size: 1.5rem;
         font-weight: 700;
-        line-height: 1.1;
+        line-height: 1.15;
+        color: var(--tile);
     }
 
     span {
-        font-size: .8rem;
+        font-size: .82rem;
         font-weight: 300;
-        opacity: .9;
+        color: var(--text-muted);
     }
 
     &.primary {
-        background: var(--primary);
-        color: #fff;
-
-        i {
-            background: hsl(var(--hue) 100% 26%);
-            color: #fff;
-            box-shadow: 2px 2px 4px hsl(0 0% 0% / .35),
-                -1px -1px 3px hsl(0 0% 100% / .15);
-        }
+        --tile: var(--tile-blue);
     }
 
     &.accent {
-        background: var(--accent);
-        color: hsl(var(--hue) 26% 12%);
-
-        i {
-            background: hsl(50 100% 62%);
-            color: hsl(var(--hue) 26% 12%);
-        }
+        --tile: var(--tile-sky);
     }
 
     &.light {
-        background: var(--surface);
-        color: var(--text);
-
-        i {
-            background: var(--accent);
-            color: hsl(var(--hue) 26% 12%);
-        }
+        --tile: var(--tile-gold);
     }
 
     &.glass {
-        background: var(--glass-solid);
-        border: 1px solid var(--glass-border);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        color: var(--text);
-
-        strong {
-            font-size: 1.05rem;
-        }
+        --tile: var(--text);
     }
 }
 
