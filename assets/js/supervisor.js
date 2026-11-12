@@ -155,6 +155,8 @@ function showSection(name) {
   pageTitle.textContent = TITLES[name];
   window.scrollTo({ top: 0, behavior: "smooth" });
   history.replaceState(null, "", "#" + name);
+  if (name === "students") loadStudents();
+  if (name === "reviews") loadReviews();
 }
 
 // ========== 6.0 Event Wiring ==========
@@ -177,3 +179,174 @@ logoutBtn.addEventListener("click", () => FYP.signOut());
 
 // ========== 7.0 Start ==========
 init();
+
+// ========== 8.0 Students and Reviews ==========
+const studentsBody = document.getElementById("studentsBody");
+const reviewsBody = document.getElementById("reviewsBody");
+
+const MILESTONE_TAGS = {
+  done: ["done", "Complete"],
+  overdue: ["overdue", "Overdue"],
+  soon: ["soon", "Due soon"],
+  upcoming: ["upcoming", "Upcoming"],
+};
+
+// Every project this supervisor is responsible for, with its milestones and documents
+async function loadProjects() {
+  return FYP.run(
+    FYP.sb
+      .from("projects")
+      .select(
+        "id, title, allocated_at, student:profiles!student_id(full_name), milestones(id, position, title, due_date, status), documents(id, name, version, status, reviewer_comment, created_at, storage_path, milestone_id)",
+      )
+      .eq("supervisor_id", profile.id)
+      .order("allocated_at", { ascending: false }),
+  );
+}
+
+async function loadStudents() {
+  try {
+    const projects = await loadProjects();
+    studentsBody.innerHTML = projects.length
+      ? projects
+          .map((p) => {
+            const ms = p.milestones
+              .slice()
+              .sort((a, b) => a.position - b.position);
+            return `<div class="student-block">
+              <p class="section-label">${FYP.esc(p.student ? p.student.full_name : "Student")}</p>
+              <p class="lead">${FYP.esc(p.title)}</p>
+              <ul class="rows">
+                ${ms
+                  .map((m) => {
+                    const st = FYP.milestoneStatus(m);
+                    const [cls, label] = MILESTONE_TAGS[st];
+                    const approved = p.documents.some(
+                      (d) => d.milestone_id === m.id && d.status === "approved",
+                    );
+                    return `<li class="row" style="cursor: default;">
+                      <div class="main">
+                        <strong>${FYP.esc(m.title)}</strong>
+                        <small>Due ${FYP.formatDate(m.due_date)}${approved ? " · has an approved document" : ""}</small>
+                      </div>
+                      <span class="tag ${cls}">${label}</span>
+                      ${st === "done" ? "" : `<button class="btn btn-primary btn-small" data-complete="${m.id}">Mark complete</button>`}
+                    </li>`;
+                  })
+                  .join("")}
+              </ul>
+            </div>`;
+          })
+          .join("")
+      : `<p class="lead">No students have picked one of your topics yet.</p>`;
+  } catch (e) {
+    FYP.showToast(FYP.errText(e));
+  }
+}
+
+// Marking complete needs an approved document in that milestone. The database checks it
+studentsBody.addEventListener("click", async (e) => {
+  const btn = e.target.closest("[data-complete]");
+  if (!btn) return;
+  try {
+    await FYP.run(
+      FYP.sb.rpc("complete_milestone", { p_milestone: btn.dataset.complete }),
+    );
+    FYP.showToast("Milestone complete");
+    await loadStudents();
+  } catch (err) {
+    FYP.showToast(FYP.errText(err));
+  }
+});
+
+async function loadReviews() {
+  try {
+    const projects = await loadProjects();
+    const waiting = projects.flatMap((p) =>
+      p.documents
+        .filter((d) => d.status === "review")
+        .map((d) => ({
+          d,
+          p,
+          m: p.milestones.find((x) => x.id === d.milestone_id),
+        })),
+    );
+    reviewsBody.innerHTML = waiting.length
+      ? waiting
+          .map(
+            ({
+              d,
+              p,
+              m,
+            }) => `<div class="row" style="flex-wrap: wrap; cursor: default;">
+              <div class="main">
+                <strong>${FYP.esc(d.name)}</strong>
+                <small>${FYP.esc(p.student ? p.student.full_name : "Student")} · ${FYP.esc(m ? m.title : "")} · version ${d.version}</small>
+              </div>
+              <button class="link-btn" data-open="${FYP.esc(d.storage_path)}">Open</button>
+              <button class="btn btn-primary btn-small" data-approve="${d.id}">Approve</button>
+              <button class="btn btn-small ghost" data-changes="${d.id}">Request changes</button>
+              <div class="comment-box" id="comment-${d.id}" style="flex-basis: 100%;">
+                <textarea rows="2" placeholder="What should the student change?"></textarea>
+                <button class="btn btn-primary btn-small comment-send" data-send="${d.id}">Send</button>
+              </div>
+            </div>`,
+          )
+          .join("")
+      : `<p class="lead">Nothing is waiting for review.</p>`;
+  } catch (e) {
+    FYP.showToast(FYP.errText(e));
+  }
+}
+
+// Approve, request changes, open the file, or send the requested changes
+reviewsBody.addEventListener("click", async (e) => {
+  const open = e.target.closest("[data-open]");
+  if (open) return FYP.openStoredFile(open.dataset.open);
+
+  const approve = e.target.closest("[data-approve]");
+  if (approve) {
+    try {
+      await FYP.run(
+        FYP.sb.rpc("review_document", {
+          p_doc: approve.dataset.approve,
+          p_decision: "approved",
+          p_comment: null,
+        }),
+      );
+      FYP.showToast("Document approved");
+      await loadReviews();
+    } catch (err) {
+      FYP.showToast(FYP.errText(err));
+    }
+    return;
+  }
+
+  const changes = e.target.closest("[data-changes]");
+  if (changes) {
+    document
+      .getElementById(`comment-${changes.dataset.changes}`)
+      .classList.toggle("open");
+    return;
+  }
+
+  const send = e.target.closest("[data-send]");
+  if (send) {
+    const box = document.getElementById(`comment-${send.dataset.send}`);
+    const comment = box.querySelector("textarea").value.trim();
+    if (!comment) return FYP.showToast("Write what should change first");
+    try {
+      await FYP.run(
+        FYP.sb.rpc("review_document", {
+          p_doc: send.dataset.send,
+          p_decision: "changes",
+          p_comment: comment,
+        }),
+      );
+      FYP.showToast("Changes requested");
+      await loadReviews();
+    } catch (err) {
+      FYP.showToast(FYP.errText(err));
+    }
+  }
+});

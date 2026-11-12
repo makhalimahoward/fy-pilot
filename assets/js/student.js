@@ -296,6 +296,7 @@ const TAGS = {
   overdue: ["overdue", "Overdue", "ri-error-warning-line"],
   soon: ["soon", "Due soon", "ri-time-line"],
   upcoming: ["upcoming", "Upcoming", "ri-circle-line"],
+  locked: ["upcoming", "Locked", "ri-lock-line"],
 };
 
 function renderMilestones() {
@@ -304,12 +305,14 @@ function renderMilestones() {
     <ul class="list">
       ${data.milestones
         .map((m) => {
-          const [cls, label, icon] = TAGS[status(m)];
+          const key =
+            isLocked(m) && status(m) !== "done" ? "locked" : status(m);
+          const [cls, label, icon] = TAGS[key];
           return `<li class="item">
             <i class="${icon}"></i>
             <div class="main"><strong>${FYP.esc(m.title)}</strong><small>Due ${short(m.due_date)}</small></div>
             <span class="tag ${cls}">${label}</span>
-            <button class="link-btn" data-go="documents">Upload</button>
+            ${key === "locked" ? "" : `<button class="link-btn" data-go="documents">Upload</button>`}
           </li>`;
         })
         .join("")}
@@ -387,40 +390,6 @@ feedbackBody.addEventListener("click", async (e) => {
   }
 });
 
-// ========== 8.0 Documents ==========
-// Lists what has been uploaded. Uploading comes in the next step
-function renderDocuments() {
-  const docs = data.documents.map((d) => {
-    const ext = (d.name.split(".").pop() || "").toUpperCase();
-    const [cls, label] =
-      d.status === "approved"
-        ? ["done", "Approved"]
-        : d.status === "changes"
-          ? ["overdue", "Changes requested"]
-          : ["soon", "Waiting for review"];
-    return `<article class="doc-card">
-      <div class="doc-thumb">
-        <span class="type-badge">${FYP.esc(ext)}</span>
-        <div class="page"><span class="line w80"></span><span class="line w60"></span><span class="line w90"></span><span class="line w70"></span></div>
-      </div>
-      <div class="doc-meta">
-        <div class="doc-text"><strong>${FYP.esc(d.name)}</strong><small>Version ${d.version} · ${short(d.created_at.slice(0, 10))}</small></div>
-      </div>
-      <div class="doc-foot">
-        <span class="tag ${cls}">${label}</span>
-        ${d.reviewer_comment ? `<p class="thread-note">${FYP.esc(d.reviewer_comment)}</p>` : ""}
-      </div>
-    </article>`;
-  });
-
-  docGrid.innerHTML = `
-    <button class="doc-new" data-toast="Uploads are the next step">
-      <span class="doc-new-plus neu neu-circle"><i class="ri-add-line"></i></span>
-      <span class="doc-new-text">Upload new version</span>
-    </button>
-    ${docs.join("")}`;
-}
-
 // ========== 9.0 Rendering ==========
 function renderAll() {
   const s = summary();
@@ -495,6 +464,170 @@ document.addEventListener("click", (e) => {
 fabBtn.addEventListener("click", () => fabPanel.classList.toggle("open"));
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") fabPanel.classList.remove("open");
+});
+
+// ========== 14.0 Documents: Locking and Upload ==========
+// A milestone is locked until every milestone before it is complete
+function isLocked(m) {
+  return data.milestones.some(
+    (x) => x.position < m.position && status(x) !== "done",
+  );
+}
+
+// Labels shown for each document type. Chapter uses its number
+function docLabel(type, chapterNo, fileName) {
+  if (type === "proposal") return "Proposal";
+  if (type === "chapter") return `Chapter ${chapterNo}`;
+  if (type === "presentation") return "Presentation";
+  return fileName;
+}
+
+function uploadFormHtml() {
+  const open = data.milestones.filter(
+    (m) => !isLocked(m) && status(m) !== "done",
+  );
+  if (!open.length) {
+    return `<div class="placeholder-card glass">
+      <i class="ri-lock-line"></i>
+      <h3>No milestone is open for upload</h3>
+      <p>Milestones open in order. Complete the current one to unlock the next.</p>
+    </div>`;
+  }
+  return `<form id="uploadForm" class="upload-card glass">
+    <h4>Upload a document</h4>
+    <label>Milestone
+      <select name="milestone" required>
+        ${open.map((m) => `<option value="${m.id}">${FYP.esc(m.title)}</option>`).join("")}
+      </select>
+    </label>
+    <label>Document type
+      <select name="doc_type" required>
+        <option value="proposal">Proposal</option>
+        <option value="chapter">Chapter</option>
+        <option value="presentation">Presentation</option>
+        <option value="other">Other</option>
+      </select>
+    </label>
+    <label class="chapter-field" hidden>Chapter number
+      <input type="number" name="chapter_no" min="1" max="20" placeholder="1">
+    </label>
+    <label>File
+      <input type="file" name="file" required accept=".pdf,.doc,.docx,.ppt,.pptx,.zip">
+    </label>
+    <button type="submit" class="btn btn-primary submit">Upload</button>
+    <p class="thread-note">Each upload goes to your supervisor for review. Upload a new version to replace it.</p>
+  </form>`;
+}
+
+function docRow(d) {
+  const [cls, label] =
+    d.status === "approved"
+      ? ["done", "Approved"]
+      : d.status === "changes"
+        ? ["overdue", "Changes requested"]
+        : ["soon", "Waiting for review"];
+  return `<div class="doc-row glass">
+    <div class="doc-row-main">
+      <strong>${FYP.esc(d.name)}</strong>
+      <small>Version ${d.version} · ${short(d.created_at.slice(0, 10))}</small>
+    </div>
+    <span class="tag ${cls}">${label}</span>
+    ${d.reviewer_comment ? `<p class="thread-note">${FYP.esc(d.reviewer_comment)}</p>` : ""}
+  </div>`;
+}
+
+// Documents grouped by milestone, in the order the milestones and uploads happened
+function renderDocuments() {
+  const position = (id) =>
+    (data.milestones.find((m) => m.id === id) || { position: 0 }).position;
+  const docs = [...data.documents].sort(
+    (a, b) =>
+      position(a.milestone_id) - position(b.milestone_id) ||
+      a.created_at.localeCompare(b.created_at),
+  );
+  const groups = data.milestones
+    .map((m) => ({ m, list: docs.filter((d) => d.milestone_id === m.id) }))
+    .filter((g) => g.list.length);
+
+  docGrid.innerHTML = `
+    <div class="doc-layout">
+      ${uploadFormHtml()}
+      <div class="doc-list">
+        ${
+          groups.length
+            ? groups
+                .map(
+                  (g) =>
+                    `<div class="doc-group"><h4>${FYP.esc(g.m.title)}</h4>${g.list.map(docRow).join("")}</div>`,
+                )
+                .join("")
+            : `<div class="placeholder-card glass">
+              <i class="ri-file-text-line"></i>
+              <h3>No documents yet</h3>
+              <p>Uploads appear here, grouped by milestone, in the order you sent them.</p>
+            </div>`
+        }
+      </div>
+    </div>`;
+}
+
+// Show the chapter number only when the type is a chapter
+docGrid.addEventListener("change", (e) => {
+  if (e.target.name !== "doc_type") return;
+  const field = docGrid.querySelector(".chapter-field");
+  if (field) field.hidden = e.target.value !== "chapter";
+});
+
+// Uploads the file to storage, then records it against the milestone
+docGrid.addEventListener("submit", async (e) => {
+  if (e.target.id !== "uploadForm") return;
+  e.preventDefault();
+  const form = e.target;
+  const file = form.file.files[0];
+  if (!file) return FYP.showToast("Choose a file first");
+
+  const milestoneId = form.milestone.value;
+  const docType = form.doc_type.value;
+  const chapterNo =
+    docType === "chapter" ? Number(form.chapter_no.value) : null;
+  if (docType === "chapter" && !chapterNo)
+    return FYP.showToast("Enter the chapter number");
+
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  button.textContent = "Uploading…";
+
+  const path = `${data.project.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  try {
+    const { error: storageError } = await FYP.sb.storage
+      .from("documents")
+      .upload(path, file);
+    if (storageError) throw storageError;
+
+    try {
+      await FYP.run(
+        FYP.sb.from("documents").insert({
+          project_id: data.project.id,
+          milestone_id: milestoneId,
+          doc_type: docType,
+          chapter_no: chapterNo,
+          name: docLabel(docType, chapterNo, file.name),
+          storage_path: path,
+        }),
+      );
+    } catch (dbError) {
+      // The record was refused, so remove the file that was just stored
+      await FYP.sb.storage.from("documents").remove([path]);
+      throw dbError;
+    }
+
+    FYP.showToast("Uploaded for review");
+    await refresh();
+  } catch (err) {
+    FYP.showToast(FYP.errText(err));
+    button.disabled = false;
+    button.textContent = "Upload";
+  }
 });
 
 // ========== 13.0 Start ==========

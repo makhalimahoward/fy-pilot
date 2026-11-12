@@ -1859,3 +1859,115 @@ body.no-project .fab-panel {
         color: var(--text-muted);
     }
 }
+
+/* ========== 20.0 Student: Upload and Document List ========== */
+/* The upload form sits beside the documents, grouped by milestone */
+.doc-layout {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.upload-card {
+    padding: 1.3rem 1.2rem;
+    border-radius: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    background: linear-gradient(140deg, hsl(0 0% 100% / .55), hsl(0 0% 100% / .18));
+    border: 1px solid hsl(0 0% 100% / .55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    h4 {
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: .35rem;
+        font-size: .78rem;
+        font-weight: 500;
+    }
+
+    input,
+    select {
+        padding: .6rem .8rem;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font: inherit;
+        font-size: .85rem;
+        color: var(--text);
+        background: var(--surface);
+        box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+    }
+
+    .submit {
+        width: 100%;
+    }
+}
+
+.doc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+.doc-group h4 {
+    margin-bottom: .6rem;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.doc-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .8rem;
+    padding: .75rem 1rem;
+    margin-bottom: .5rem;
+    border-radius: 1rem;
+    background: linear-gradient(140deg, hsl(0 0% 100% / .55), hsl(0 0% 100% / .18));
+    border: 1px solid hsl(0 0% 100% / .55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    .doc-row-main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .15rem;
+    }
+
+    strong {
+        font-size: .88rem;
+        font-weight: 600;
+    }
+
+    small {
+        font-size: .74rem;
+        color: var(--text-muted);
+    }
+
+    .thread-note {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+[data-theme="dark"] .upload-card,
+[data-theme="dark"] .doc-row {
+    background: linear-gradient(140deg, hsl(0 0% 100% / .12), hsl(0 0% 100% / .03));
+    border-color: hsl(0 0% 100% / .14);
+}
+
+@media (max-width: 760px) {
+    .doc-layout {
+        grid-template-columns: 1fr;
+    }
+}
