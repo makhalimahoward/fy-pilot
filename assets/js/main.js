@@ -127,7 +127,7 @@ function returnAddress() {
 }
 
 // ========== 8.0 Routing by Role ==========
-// Sends the person to the page for the role stored in their profile.
+// Students with no project go to the topic picker first. Everyone else goes to their own page.
 // Pending accounts still go to their page, which explains the wait. Rejected accounts are signed out
 let routing = false;
 async function routeByRole() {
@@ -169,7 +169,18 @@ async function routeByRole() {
     return;
   }
 
-  window.location.replace(FYP.ROLE_PAGE[profile.role] || "student.html");
+  let destination = FYP.ROLE_PAGE[profile.role] || "student.html";
+
+  if (profile.role === "student") {
+    const { data: projects } = await FYP.sb
+      .from("projects")
+      .select("id")
+      .eq("student_id", session.user.id)
+      .limit(1);
+    if (!projects || !projects.length) destination = "student.html";
+  }
+
+  window.location.replace(destination);
 }
 
 // ========== 9.0 Confirmation Links ==========
