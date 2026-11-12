@@ -1,3 +1,9 @@
+/* ========== 0.0 Hidden Elements ========== */
+/* The hidden attribute always hides, even where a class sets display */
+[hidden] {
+    display: none !important;
+}
+
 /* ========== 1.0 Student: Layout ========== */
 /* Student page only: the content is centred in the space to the right of the sidebar */
 .dash-main {
