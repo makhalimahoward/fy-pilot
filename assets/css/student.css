@@ -1340,3 +1340,478 @@ button.act {
         color: var(--text-muted);
     }
 }
+
+/* ========== 1.0 Topics: Base ========== */
+
+/* ========== 2.0 Topics: Top Bar ========== */
+.picker-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+}
+
+.brand-top {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    i {
+        font-size: 1.4rem;
+        color: var(--primary);
+    }
+
+    em {
+        font-style: normal;
+        color: var(--primary);
+    }
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+
+    .theme-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        color: var(--text);
+    }
+}
+
+.ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .65rem 1.1rem;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: .85rem;
+    font-weight: 600;
+    box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+    transition: transform .2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* ========== 3.0 Topics: Heading ========== */
+.picker {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 2rem 2rem 6rem;
+}
+
+.picker-head {
+    margin-bottom: 2.5rem;
+
+    h1 {
+        font-size: clamp(1.9rem, 4vw, 2.6rem);
+        font-weight: 700;
+        line-height: 1.15;
+        margin: .3rem 0 .7rem;
+    }
+
+    .lead {
+        max-width: 38rem;
+        font-size: 1rem;
+        font-weight: 300;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+}
+
+.eyebrow-s {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--primary);
+}
+
+/* ========== 4.0 Topics: Empty State ========== */
+.empty {
+    padding: 3rem 2rem;
+    border-radius: 1.6rem;
+    text-align: center;
+    background: var(--glass-solid);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    i {
+        font-size: 2.6rem;
+        color: var(--primary);
+    }
+
+    h2 {
+        margin: .8rem 0 .4rem;
+        font-size: 1.2rem;
+    }
+
+    p {
+        color: var(--text-muted);
+        font-weight: 300;
+    }
+}
+
+/* ========== 5.0 Topics: Carousel Track ========== */
+/* A horizontal track that snaps card by card. Cards are glass, with a soft blue glow */
+.track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 1.5rem .25rem 1.75rem;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.tcard {
+    position: relative;
+    flex: 0 0 min(100%, 460px);
+    scroll-snap-align: start;
+    overflow: hidden;
+    padding: 1.75rem;
+    border-radius: 1.6rem;
+    cursor: pointer;
+    background: linear-gradient(140deg, hsl(0 0% 100% / .62), hsl(0 0% 100% / .18));
+    border: 1px solid hsl(0 0% 100% / .55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    box-shadow: 0 22px 50px hsl(210 60% 20% / .16),
+        inset 0 1px 0 hsl(0 0% 100% / .7);
+    transition: flex-basis .55s var(--ease-out), transform .35s ease, box-shadow .35s ease;
+
+    /* Soft blue light in the corner */
+    &::before {
+        content: '';
+        position: absolute;
+        top: -130px;
+        right: -90px;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: radial-gradient(circle, hsl(205 100% 50% / .32), transparent 70%);
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 28px 60px hsl(210 60% 20% / .22),
+            inset 0 1px 0 hsl(0 0% 100% / .7);
+    }
+
+    &.expanded {
+        flex-basis: 100%;
+        cursor: default;
+        transform: none;
+    }
+}
+
+/* Dark theme: the same glass, lit from within rather than from above */
+[data-theme="dark"] .tcard {
+    background: linear-gradient(140deg, hsl(0 0% 100% / .12), hsl(0 0% 100% / .03));
+    border-color: hsl(0 0% 100% / .14);
+    box-shadow: 0 22px 50px hsl(0 0% 0% / .35),
+        inset 0 1px 0 hsl(0 0% 100% / .12);
+}
+
+/* ========== 6.0 Topics: Card Content ========== */
+.tcard-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+}
+
+.code {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--primary);
+}
+
+.tcard h3 {
+    position: relative;
+    z-index: 1;
+    margin: .9rem 0 .5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.sup {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    font-size: .9rem;
+    color: var(--text-muted);
+
+    i {
+        color: var(--primary);
+    }
+}
+
+.chips {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-top: 1rem;
+}
+
+.chip-tech {
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 500;
+    background: hsl(0 0% 100% / .6);
+    border: 1px solid hsl(0 0% 100% / .7);
+}
+
+[data-theme="dark"] .chip-tech {
+    background: hsl(0 0% 100% / .08);
+    border-color: hsl(0 0% 100% / .14);
+}
+
+.more {
+    position: relative;
+    z-index: 1;
+    margin-top: 1.2rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* The details that appear when a card expands */
+.details {
+    position: relative;
+    z-index: 1;
+    display: none;
+    margin-top: 1.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.tcard.expanded .details {
+    display: block;
+    animation: detailsIn .55s var(--ease-out) both;
+}
+
+.tcard.expanded .more {
+    display: none;
+}
+
+@keyframes detailsIn {
+    from {
+        opacity: 0;
+        translate: 0 12px;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.details h4 {
+    margin: 1.2rem 0 .4rem;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.details p {
+    font-size: .95rem;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+.details ol {
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    font-size: .95rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.choose {
+    margin-top: 1.6rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.choose[disabled] {
+    opacity: .6;
+    pointer-events: none;
+}
+
+/* ========== 7.0 Topics: Carousel Controls ========== */
+.carousel-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .5rem;
+}
+
+.arrow {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    color: var(--primary);
+    transition: opacity .2s ease, transform .2s ease;
+
+    &:hover:not([disabled]) {
+        transform: translateY(-2px);
+    }
+
+    &[disabled] {
+        opacity: .35;
+        pointer-events: none;
+    }
+}
+
+.dots-row {
+    display: flex;
+    gap: .5rem;
+}
+
+.dot-pick {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--shadow-dark);
+    transition: width .3s ease, background .3s ease;
+
+    &.active {
+        width: 26px;
+        background: var(--primary);
+    }
+}
+
+/* ========== 8.0 Topics: Confirmation ========== */
+.confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background: hsl(210 30% 10% / .45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: viewIn .35s var(--ease-out) both;
+}
+
+.confirm-card {
+    width: min(400px, 100%);
+    padding: 2.2rem 2rem;
+    border-radius: 1.6rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+
+    h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    p {
+        font-size: .95rem;
+        line-height: 1.6;
+    }
+
+    .confirm-sub {
+        font-size: .85rem;
+        font-weight: 300;
+        color: var(--text-muted);
+    }
+}
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    margin-bottom: .4rem;
+    border-radius: 50%;
+    border: 3px solid var(--surface);
+    border-top-color: var(--primary);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes viewIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========== 9.0 Topics: Responsive ========== */
+@media (max-width: 600px) {
+    .picker-top {
+        padding: 1rem 1.25rem;
+    }
+
+    .picker {
+        padding: 1.25rem 1.25rem 5rem;
+    }
+
+    .tcard {
+        padding: 1.4rem;
+    }
+}
+
+/* ========== 10.0 Topics: Page States ========== */
+/* While the page checks the account, the dashboard stays hidden. A student with no project sees
+   only the picker. A student with a project sees the dashboard */
+body.loading .sidebar,
+body.loading .dash-main,
+body.loading .fab,
+body.loading .fab-panel {
+    visibility: hidden;
+}
+
+.picker-wrap {
+    display: none;
+}
+
+body.no-project .picker-wrap {
+    display: block;
+}
+
+body.no-project .sidebar,
+body.no-project .dash-main,
+body.no-project .fab,
+body.no-project .fab-panel {
+    display: none;
+}
