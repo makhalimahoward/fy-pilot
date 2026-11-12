@@ -201,7 +201,7 @@
     display: grid;
     grid-template-columns: 1.4fr .6fr;
     align-items: center;
-    padding: 2.25rem 2.5rem 3.5rem;
+    padding: 2.25rem 1.5rem 3.5rem 2.5rem;
     opacity: 0;
     pointer-events: none;
     transition: opacity .7s ease;
@@ -259,6 +259,7 @@
 .slide-visual {
     display: grid;
     place-items: center;
+    justify-self: end;
 
     i {
         width: 150px;
