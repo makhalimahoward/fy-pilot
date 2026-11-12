@@ -14,6 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/supervisor.css">
+    <link rel="stylesheet" href="assets/css/extras.css">
 </head>
 
 <body>
@@ -25,8 +26,9 @@
         </a>
 
         <nav class="nav-links">
-            <button class="nav-btn active" data-section="home"><i
-                    class="ri-team-line"></i><span>Students</span></button>
+            <button class="nav-btn active" data-section="topics"><i
+                    class="ri-lightbulb-line"></i><span>Topics</span></button>
+            <button class="nav-btn" data-section="students"><i class="ri-team-line"></i><span>Students</span></button>
             <button class="nav-btn" data-section="reviews"><i
                     class="ri-file-search-line"></i><span>Reviews</span></button>
             <button class="nav-btn" id="logoutBtn"><i class="ri-logout-box-r-line"></i><span>Log out</span></button>
@@ -44,135 +46,73 @@
             <!-- ========== 3.1 Top Bar ========== -->
             <header class="topline">
                 <div class="greet">
-                    <h2 id="pageTitle">Your students</h2>
-                    <p>Dr. A. Ndlovu · Sunday, 1 November 2026</p>
+                    <h2 id="pageTitle">My topics</h2>
+                    <p id="todayLine"></p>
                 </div>
                 <div class="actions">
-                    <button class="bell neu neu-circle" aria-label="Notifications">
-                        <i class="ri-notification-3-line"></i>
-                        <span class="badge">3</span>
-                    </button>
                     <div class="avatar neu neu-circle">
-                        <div class="profile-icon"><i class="ri-user-smile-line"></i></div>
+                        <div class="profile-icon"><i class="ri-user-star-line"></i></div>
                     </div>
                 </div>
             </header>
 
-            <!-- ========== 4.0 Students (home) ========== -->
-            <section class="view active" id="home">
-                <div class="stats">
-                    <div class="stat primary">
-                        <i class="ri-group-line"></i>
-                        <div><strong id="statStudents">5</strong><span>Students supervised</span></div>
-                    </div>
-                    <div class="stat accent">
-                        <i class="ri-chat-quote-line"></i>
-                        <div><strong>3</strong><span>Sessions this week</span></div>
-                    </div>
-                    <div class="stat light" id="statReviews">
-                        <i class="ri-file-search-line"></i>
-                        <div><strong id="reviewCount">2</strong><span>Submissions to review</span></div>
-                    </div>
-                    <div class="stat glass" id="statCapacity">
-                        <i class="ri-user-star-line"></i>
-                        <div><strong id="capacityText">5 of 8</strong><span id="capacityNote">Capacity</span></div>
-                    </div>
+            <!-- ========== 4.0 Topics (home) ========== -->
+            <section class="view active" id="topics">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem;">
+                    <p class="section-label">Your topics</p>
+                    <button class="btn btn-primary btn-small" id="newTopic"><i class="ri-add-line"></i> New
+                        topic</button>
                 </div>
-
-                <p class="section-label">Caseload</p>
-                <ul class="rows" id="studentRows"></ul>
+                <ul class="rows" id="topicRows"></ul>
             </section>
 
-            <!-- ========== 5.0 Reviews ========== -->
+            <!-- ========== 5.0 Students (placeholder) ========== -->
+            <section class="view" id="students">
+                <p class="lead">Students appear here once they pick one of your topics.</p>
+            </section>
+
+            <!-- ========== 6.0 Reviews (placeholder) ========== -->
             <section class="view" id="reviews">
-                <p class="section-label">Waiting for review</p>
-                <ul class="rows" id="reviewRows"></ul>
-            </section>
-
-            <!-- ========== 6.0 Student workspace ========== -->
-            <section class="view" id="workspace">
-                <button class="back-btn" data-section="home"><i class="ri-arrow-left-line"></i> All students</button>
-
-                <div class="ws-head">
-                    <div class="ring" id="wsRing" style="--glow: 0 102 179;">
-                        <span class="ring-value" id="wsPct">33<small>%</small></span>
-                    </div>
-                    <div class="ws-text">
-                        <h3 class="page-title" id="wsName">Howard Makhalima</h3>
-                        <p class="lead" id="wsProject">Project title</p>
-                        <button class="btn btn-primary btn-small" id="openLog"><i class="ri-add-line"></i> Log
-                            session</button>
-                    </div>
-                </div>
-
-                <div class="tabs" role="tablist">
-                    <button class="tab active" data-tab="overview" role="tab">Overview</button>
-                    <button class="tab" data-tab="milestones" role="tab">Milestones</button>
-                    <button class="tab" data-tab="documents" role="tab">Documents</button>
-                    <button class="tab" data-tab="sessions" role="tab">Sessions</button>
-                </div>
-
-                <div class="tab-panel active" id="tab-overview">
-                    <div class="facts">
-                        <div><span>Supervisor</span><strong>Dr. A. Ndlovu</strong></div>
-                        <div><span>Last session</span><strong id="wsLast">28 Oct 2026</strong></div>
-                        <div><span>Next deadline</span><strong id="wsNext">3 Nov 2026</strong></div>
-                    </div>
-                    <p class="section-label">Needs attention</p>
-                    <ul class="rows" id="wsAttention"></ul>
-                </div>
-
-                <div class="tab-panel" id="tab-milestones">
-                    <ul class="rows" id="wsMilestones"></ul>
-                </div>
-
-                <div class="tab-panel" id="tab-documents">
-                    <ul class="rows" id="wsDocuments"></ul>
-                </div>
-
-                <div class="tab-panel" id="tab-sessions">
-                    <div class="thread" id="wsThread"></div>
-                    <p class="thread-note"><i class="ri-lock-line"></i> Saved sessions are locked and cannot be edited.
-                    </p>
-                </div>
+                <p class="lead">Submitted documents appear here for review.</p>
             </section>
 
         </div>
     </main>
 
-    <!-- ========== 7.0 Log Session Drawer ========== -->
+    <!-- ========== 7.0 New Topic Drawer ========== -->
     <div class="drawer-wrap" id="drawerWrap">
         <div class="drawer glass" role="dialog" aria-labelledby="drawerTitle">
             <div class="drawer-head">
-                <h3 id="drawerTitle">Log a session</h3>
-                <button class="close neu neu-circle" id="closeLog" aria-label="Close"><i
+                <h3 id="drawerTitle">New topic</h3>
+                <button class="close neu neu-circle" id="closeTopic" aria-label="Close"><i
                         class="ri-close-line"></i></button>
             </div>
 
-            <form id="logForm" class="log-form">
-                <label>Date
-                    <input type="date" id="logDate" value="2026-11-01" required>
+            <form id="topicForm" class="log-form">
+                <label>Title
+                    <input type="text" id="topicTitle" required
+                        placeholder="Web Based Final Year Project Supervision System">
                 </label>
 
-                <label>Notes
-                    <textarea id="logNotes" rows="3" placeholder="What was discussed"></textarea>
+                <label>Description
+                    <textarea id="topicDesc" rows="3" placeholder="What the project is about"></textarea>
                 </label>
 
-                <label>Feedback
-                    <textarea id="logFeedback" rows="3" placeholder="What the student should work on"></textarea>
+                <label>Objectives (one per line)
+                    <textarea id="topicObjectives" rows="4"
+                        placeholder="Develop a database for managing students&#10;Implement student-supervisor allocation"></textarea>
                 </label>
 
-                <div class="action-builder">
-                    <span class="field-title">Action items</span>
-                    <div class="action-input">
-                        <input type="text" id="actText" placeholder="Action">
-                        <input type="date" id="actDue">
-                        <button type="button" class="link-btn" id="addAction">Add</button>
-                    </div>
-                    <ul class="action-preview" id="actPreview"></ul>
-                </div>
+                <label>Technologies
+                    <input type="text" id="topicTech" placeholder="Python, Django, PostgreSQL">
+                </label>
 
-                <button type="submit" class="btn btn-primary submit">Save session</button>
+                <label>Other requirements
+                    <textarea id="topicReqs" rows="2" placeholder="Web programming, database design"></textarea>
+                </label>
+
+                <button type="submit" class="btn btn-primary submit">Submit for approval</button>
+                <p class="thread-note">The coordinator approves each topic before students can see it.</p>
             </form>
         </div>
     </div>
@@ -180,6 +120,9 @@
     <!-- ========== 8.0 Toast ========== -->
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <!-- ========== 9.0 Scripts ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="assets/js/api.js" defer></script>
     <script src="assets/js/supervisor.js" defer></script>
 </body>
 
