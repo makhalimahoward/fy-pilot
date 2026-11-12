@@ -414,6 +414,7 @@ showSection(location.hash.replace("#", "") || "dashboard");
         : "your supervisor";
     confirmText.textContent = `${topic ? topic.code + " · " + topic.title : "Your topic"} with ${supervisor}.`;
     confirmEl.hidden = false;
+    confirmEl.style.display = "grid";
     setTimeout(() => {
       window.location.reload();
     }, 3000);
