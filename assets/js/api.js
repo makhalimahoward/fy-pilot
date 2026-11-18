@@ -370,25 +370,57 @@ FYP.reader = (() => {
     return { doc, comments };
   }
 
-  // Splits the text into paragraphs, then marks the quoted words of each comment
+  // A short line is a heading when it is numbered (such as "3. Problem Statement"),
+  // starts with a usual section word, or is written in capitals
+  function isHeading(block) {
+    if (block.includes("\n") || block.length > 90) return false;
+    if (/^\d+(\.\d+)*\.?\s+\S/.test(block)) return true;
+    if (
+      /^(abstract|introduction|conclusion|references|bibliography|appendix|acknowledgements?|chapter\s+\d+)\b/i.test(
+        block,
+      )
+    )
+      return true;
+    return (
+      block === block.toUpperCase() &&
+      /[A-Z]/.test(block) &&
+      block.split(" ").length <= 8
+    );
+  }
+
+  // Groups the text into sections under its headings, and marks the quoted words of each comment
   function paragraphs(text, comments) {
-    const parts = text
+    const items = text
       .split(/\n\s*\n/)
-      .map((p) => p.trim())
+      .map((b) => b.trim())
       .filter(Boolean)
-      .map((p) => esc(p));
+      .map((b) => ({ heading: isHeading(b), html: esc(b) }));
+
     comments.forEach((c) => {
       if (!c.quote) return;
       const quote = esc(c.quote);
-      const i = parts.findIndex((p) => p.includes(quote));
-      if (i >= 0) {
-        parts[i] = parts[i].replace(
+      const item = items.find((it) => it.html.includes(quote));
+      if (item) {
+        item.html = item.html.replace(
           quote,
           `<mark class="cmt cmt-${c.status}" data-mark="${c.id}">${quote}</mark>`,
         );
       }
     });
-    return parts.map((p) => `<p>${p}</p>`).join("");
+
+    let out = "";
+    let open = false;
+    items.forEach((it) => {
+      if (it.heading) {
+        if (open) out += "</details>";
+        out += `<details class="sec" open><summary>${it.html}</summary>`;
+        open = true;
+      } else {
+        out += `<p>${it.html}</p>`;
+      }
+    });
+    if (open) out += "</details>";
+    return out;
   }
 
   function card(c, role) {

@@ -443,3 +443,35 @@ mark.cmt-resolved {
     color: var(--primary);
     margin-bottom: .2rem;
 }
+
+/* Document sections: each heading opens and closes its section */
+.reader-text details.sec {
+    margin-bottom: .8rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.reader-text summary {
+    list-style: none;
+    cursor: pointer;
+    padding: .3rem 0 .5rem;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.reader-text summary::-webkit-details-marker {
+    display: none;
+}
+
+.reader-text summary::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: .45rem;
+    color: var(--primary);
+    transition: transform .2s ease;
+}
+
+.reader-text details[open]>summary::before {
+    transform: rotate(90deg);
+}
