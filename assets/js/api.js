@@ -433,7 +433,7 @@ FYP.reader = (() => {
       .slice()
       .sort((a, b) => a.created_at.localeCompare(b.created_at));
     const canAddress = role === "student" && c.status === "open";
-    const canResolve = role === "supervisor" && c.status !== "resolved";
+    const canResolve = role === "supervisor" && c.status === "addressed";
     return `<article class="cm" id="cm-${c.id}">
       <header class="cm-head">
         <strong>${esc(c.author ? c.author.full_name : "Unknown")}</strong>

@@ -590,3 +590,26 @@ mark.cmt-resolved {
     opacity: .5;
     pointer-events: none;
 }
+
+/* Comment on section stays a plain underlined link, not a neuglass button */
+.sec-comment {
+    margin-left: .6rem;
+    padding: 0 .2rem;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--primary);
+    font-size: .75rem;
+    font-weight: 600;
+    text-decoration: underline;
+    vertical-align: middle;
+}
+
+.sec-comment:hover,
+.sec-comment:active {
+    transform: none;
+    box-shadow: none;
+}
