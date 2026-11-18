@@ -264,7 +264,7 @@ async function loadReviews() {
     const projects = await loadProjects();
     const waiting = projects.flatMap((p) =>
       p.documents
-        .filter((d) => d.status === "review")
+        .filter((d) => d.status !== "approved")
         .map((d) => ({
           d,
           p,
@@ -285,8 +285,8 @@ async function loadReviews() {
               </div>
               <button class="link-btn" data-open="${FYP.esc(d.storage_path)}">Open</button>
               <button class="link-btn" data-read="${d.id}">Read &amp; comment</button>
-              <button class="btn btn-primary btn-small" data-approve="${d.id}">Approve</button>
-              <button class="btn btn-small ghost" data-changes="${d.id}">Request changes</button>
+              ${d.status === "review" ? `<button class="btn btn-primary btn-small" data-approve="${d.id}">Approve</button>` : ""}
+              ${d.status === "review" ? `<button class="btn btn-small ghost" data-changes="${d.id}">Request changes</button>` : `<span class="tag soon">Changes requested</span>`}
               <div class="comment-box" id="comment-${d.id}" style="flex-basis: 100%;">
                 <textarea rows="2" placeholder="What should the student change?"></textarea>
                 <button class="btn btn-primary btn-small comment-send" data-send="${d.id}">Send</button>
@@ -359,3 +359,4 @@ reviewsBody.addEventListener("click", (e) => {
 });
 
 FYP.reader.init();
+FYP.reader.onChange(loadReviews);

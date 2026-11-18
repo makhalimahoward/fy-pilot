@@ -339,6 +339,7 @@ window.FYP = {
 FYP.reader = (() => {
   let current = null; // { docId, role } while the reader is open
   let bound = false;
+  let changed = null; // called after any comment action, so the page can refresh its lists
 
   const $ = (id) => document.getElementById(id);
 
@@ -468,6 +469,7 @@ FYP.reader = (() => {
       await run(sb.rpc(fn, params));
       showToast(done);
       await refresh();
+      if (changed) changed();
     } catch (e) {
       showToast(errText(e));
     }
@@ -556,5 +558,9 @@ FYP.reader = (() => {
     });
   }
 
-  return { open, close, init };
+  function onChange(fn) {
+    changed = fn;
+  }
+
+  return { open, close, init, onChange };
 })();
