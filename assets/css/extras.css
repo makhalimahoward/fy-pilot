@@ -512,3 +512,89 @@ mark.cmt-resolved {
     cursor: pointer;
     vertical-align: middle;
 }
+
+/* ========== Neuglass Buttons ========== */
+/* Every button on the review screens and in the reader. Raised when idle, pressed when clicked */
+.btn,
+.btn-small,
+.btn-primary,
+.btn.ghost,
+.ghost-btn,
+.link-btn,
+.sec-comment,
+.add-comment,
+.cm-reply-form button,
+.composer button,
+.reader-head button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 4px 4px 8px var(--shadow-dark),
+        -4px -4px 8px var(--shadow-light);
+    transition: box-shadow .2s ease, transform .2s ease, color .2s ease;
+}
+
+/* Blue text marks the buttons that move the review forward */
+.btn-primary,
+.add-comment,
+.cm-reply-form button,
+.composer button {
+    color: var(--primary);
+}
+
+.btn:hover,
+.btn-small:hover,
+.link-btn:hover,
+.sec-comment:hover,
+.add-comment:hover,
+.cm-reply-form button:hover,
+.composer button:hover,
+.reader-head button:hover {
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.btn:active,
+.btn-small:active,
+.link-btn:active,
+.sec-comment:active,
+.add-comment:active,
+.cm-reply-form button:active,
+.composer button:active,
+.reader-head button:active {
+    transform: none;
+    box-shadow: inset 3px 3px 6px var(--shadow-dark),
+        inset -3px -3px 6px var(--shadow-light);
+}
+
+.btn[disabled],
+.btn-small[disabled] {
+    opacity: .5;
+    pointer-events: none;
+}
+
+/* Dark theme: the same raised look, with shadows that show on a dark surface */
+[data-theme="dark"] .btn,
+[data-theme="dark"] .btn-small,
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .ghost-btn,
+[data-theme="dark"] .link-btn,
+[data-theme="dark"] .sec-comment,
+[data-theme="dark"] .add-comment,
+[data-theme="dark"] .cm-reply-form button,
+[data-theme="dark"] .composer button,
+[data-theme="dark"] .reader-head button {
+    box-shadow: 4px 4px 8px hsl(0 0% 0% / .45),
+        -3px -3px 6px hsl(0 0% 100% / .06);
+}
