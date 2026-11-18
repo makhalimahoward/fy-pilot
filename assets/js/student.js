@@ -70,7 +70,7 @@ async function loadData() {
   )[0];
   if (!project) return null;
 
-  const [milestones, sessions, documents] = await Promise.all([
+  const [milestones, sessions, documents, comments] = await Promise.all([
     FYP.run(
       FYP.sb
         .from("milestones")
@@ -96,9 +96,18 @@ async function loadData() {
         .eq("project_id", project.id)
         .order("created_at", { ascending: false }),
     ),
+    FYP.run(
+      FYP.sb
+        .from("document_comments")
+        .select(
+          "id, document_id, quote, body, status, created_at, author_id, author:profiles!author_id(full_name), replies:comment_replies(id, body, created_at, author_id, author:profiles!author_id(full_name))",
+        )
+        .eq("project_id", project.id)
+        .order("created_at", { ascending: true }),
+    ),
   ]);
 
-  return { profile, project, milestones, sessions, documents };
+  return { profile, project, milestones, sessions, documents, comments };
 }
 
 // Figures used across the page, worked out once from the loaded data
@@ -334,7 +343,12 @@ function renderFeedback(s) {
     )
     .join("");
 
-  if (!data.sessions.length && !reviews.length) {
+  // Comment conversations on sections of documents
+  const threads = (data.comments || [])
+    .map((c) => FYP.reader.card(c, "student"))
+    .join("");
+
+  if (!data.sessions.length && !reviews.length && !threads) {
     feedbackBody.innerHTML = `
       <h3 class="page-title">Feedback</h3>
       <p class="lead">No open actions</p>
@@ -381,10 +395,48 @@ function renderFeedback(s) {
   feedbackBody.innerHTML = `
     <h3 class="page-title">Feedback</h3>
     <p class="lead">${FYP.esc(s.supervisor)} · ${plural(s.openActions.length, "open action")}</p>
+    ${threads ? `<div class="thread-list">${threads}</div>` : ""}
     ${reviewCards ? `<div class="reviews">${reviewCards}</div>` : ""}
     ${sessions ? `<div class="thread">${sessions}</div>` : ""}
-    <p class="thread-note"><i class="ri-lock-line"></i> Supervisor notes are read-only. Tick an action when it is done.</p>`;
+    <p class="thread-note"><i class="ri-lock-line"></i> Supervisor notes are read-only. Reply to comments and tick actions when they are done.</p>`;
 }
+
+// Mark a comment as addressed, and send replies, from the Feedback page
+feedbackBody.addEventListener("click", async (e) => {
+  const addressed = e.target.closest("[data-addressed]");
+  if (!addressed) return;
+  try {
+    await FYP.run(
+      FYP.sb.rpc("mark_comment_addressed", {
+        p_comment: addressed.dataset.addressed,
+      }),
+    );
+    FYP.showToast("Marked as addressed");
+    await refresh();
+  } catch (err) {
+    FYP.showToast(FYP.errText(err));
+  }
+});
+
+feedbackBody.addEventListener("submit", async (e) => {
+  const form = e.target.closest("[data-reply]");
+  if (!form) return;
+  e.preventDefault();
+  const body = form.querySelector("input").value.trim();
+  if (!body) return;
+  try {
+    await FYP.run(
+      FYP.sb.rpc("reply_comment", {
+        p_comment: form.dataset.reply,
+        p_body: body,
+      }),
+    );
+    FYP.showToast("Reply sent");
+    await refresh();
+  } catch (err) {
+    FYP.showToast(FYP.errText(err));
+  }
+});
 
 // Ticking an action saves it to the database, then the page reloads its data
 feedbackBody.addEventListener("click", async (e) => {

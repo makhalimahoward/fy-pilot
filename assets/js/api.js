@@ -542,6 +542,9 @@ FYP.reader = (() => {
   }
 
   function init() {
+    sb.auth.getSession().then(({ data: { session } }) => {
+      myId = session ? session.user.id : null;
+    });
     if (bound || !$("readerPanel")) return;
     bound = true;
 
@@ -639,5 +642,5 @@ FYP.reader = (() => {
     changed = fn;
   }
 
-  return { open, close, init, onChange };
+  return { open, close, init, onChange, card };
 })();
