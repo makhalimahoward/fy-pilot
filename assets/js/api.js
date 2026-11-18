@@ -447,8 +447,15 @@ FYP.reader = (() => {
     if (current) render(await load(current.docId), current.role);
   }
 
+  // Moves the reader to the top of the page content, so it opens where the user is looking
+  function place() {
+    const topline = document.querySelector(".topline");
+    if (topline) topline.after($("readerPanel"));
+  }
+
   async function open(docId, role) {
     current = { docId, role };
+    place();
     $("readerPanel").hidden = false;
     try {
       render(await load(docId), role);

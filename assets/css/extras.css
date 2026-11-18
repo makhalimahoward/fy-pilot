@@ -433,3 +433,13 @@ mark.cmt-resolved {
         grid-template-columns: 1fr;
     }
 }
+
+/* Small uppercase label used above headings, such as "Review" in the reader */
+.eyebrow-s {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: .2rem;
+}
