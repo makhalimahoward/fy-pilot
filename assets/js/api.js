@@ -389,12 +389,12 @@ FYP.reader = (() => {
   }
 
   // Groups the text into sections under its headings, and marks the quoted words of each comment
-  function paragraphs(text, comments) {
+  function paragraphs(text, comments, role) {
     const items = text
       .split(/\n\s*\n/)
       .map((b) => b.trim())
       .filter(Boolean)
-      .map((b) => ({ heading: isHeading(b), html: esc(b) }));
+      .map((b) => ({ heading: isHeading(b), html: esc(b), raw: b }));
 
     comments.forEach((c) => {
       if (!c.quote) return;
@@ -413,7 +413,11 @@ FYP.reader = (() => {
     items.forEach((it) => {
       if (it.heading) {
         if (open) out += "</details>";
-        out += `<details class="sec" open><summary>${it.html}</summary>`;
+        const sectionBtn =
+          role === "supervisor"
+            ? `<button type="button" class="sec-comment" data-quote="${it.raw.replace(/"/g, "&quot;")}">Comment on section</button>`
+            : "";
+        out += `<details class="sec" open><summary>${it.html}${sectionBtn}</summary>`;
         open = true;
       } else {
         out += `<p>${it.html}</p>`;
@@ -467,7 +471,7 @@ FYP.reader = (() => {
     $("readerTitle").textContent =
       `${data.doc.name} · version ${data.doc.version}`;
     $("readerText").innerHTML = data.doc.text_content
-      ? paragraphs(data.doc.text_content, data.comments)
+      ? paragraphs(data.doc.text_content, data.comments, role)
       : `<p class="cm-empty">This file has no readable text. Open the file to read it.</p>`;
     $("readerSide").innerHTML = data.comments.length
       ? data.comments.map((c) => card(c, role)).join("")
@@ -479,10 +483,10 @@ FYP.reader = (() => {
     if (current) render(await load(current.docId), current.role);
   }
 
-  // Moves the reader to the top of the page content, so it opens where the user is looking
+  // Puts the reader below the list on the current page, so the list stays in view above it
   function place() {
-    const topline = document.querySelector(".topline");
-    if (topline) topline.after($("readerPanel"));
+    const view = document.querySelector(".view.active");
+    if (view) view.appendChild($("readerPanel"));
   }
 
   async function open(docId, role) {
@@ -519,6 +523,17 @@ FYP.reader = (() => {
     bound = true;
 
     $("readerClose").addEventListener("click", close);
+
+    // The Comment on section button opens the comment box for that whole section
+    $("readerText").addEventListener("click", (e) => {
+      const btn = e.target.closest(".sec-comment");
+      if (!btn) return;
+      e.preventDefault();
+      $("composer").dataset.quote = btn.dataset.quote;
+      $("composerQuote").textContent = `On section "${btn.dataset.quote}"`;
+      $("composer").hidden = false;
+      $("composerBody").focus();
+    });
 
     // Supervisors select words in the text, then can comment on them
     $("readerText").addEventListener("mouseup", () => {

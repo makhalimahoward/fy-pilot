@@ -287,7 +287,7 @@
 }
 
 .reader-text {
-    max-height: 70vh;
+    max-height: 52vh;
     overflow-y: auto;
     padding: 1.2rem 1.4rem;
     border-radius: 1rem;
@@ -314,7 +314,7 @@ mark.cmt-resolved {
 }
 
 .reader-side {
-    max-height: 70vh;
+    max-height: 52vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -474,4 +474,41 @@ mark.cmt-resolved {
 
 .reader-text details[open]>summary::before {
     transform: rotate(90deg);
+}
+
+/* Slim scrollbars for the reader */
+.reader-text,
+.reader-side {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(205 100% 40% / .35) transparent;
+}
+
+.reader-text::-webkit-scrollbar,
+.reader-side::-webkit-scrollbar {
+    width: 6px;
+}
+
+.reader-text::-webkit-scrollbar-thumb,
+.reader-side::-webkit-scrollbar-thumb {
+    background: hsl(205 100% 40% / .35);
+    border-radius: 999px;
+}
+
+.reader-text::-webkit-scrollbar-track,
+.reader-side::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Comment on section: sits at the right of each heading */
+.sec-comment {
+    margin-left: .6rem;
+    padding: .15rem .6rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: hsl(205 100% 50% / .1);
+    border: none;
+    cursor: pointer;
+    vertical-align: middle;
 }
