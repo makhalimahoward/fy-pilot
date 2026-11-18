@@ -90,7 +90,9 @@ async function loadData() {
     FYP.run(
       FYP.sb
         .from("documents")
-        .select("id, name, version, status, reviewer_comment, created_at")
+        .select(
+          "id, name, version, status, reviewer_comment, created_at, milestone_id",
+        )
         .eq("project_id", project.id)
         .order("created_at", { ascending: false }),
     ),
