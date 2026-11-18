@@ -323,14 +323,25 @@ function renderMilestones() {
 
 // ========== 7.0 Feedback ==========
 function renderFeedback(s) {
-  if (!data.sessions.length) {
+  // Comments left on documents during review, shown alongside the session notes
+  const reviews = data.documents.filter((d) => d.reviewer_comment);
+  const reviewCards = reviews
+    .map(
+      (d) => `<div class="feedback-card">
+        <p>${FYP.esc(d.reviewer_comment)}</p>
+        <footer>${FYP.esc(s.supervisor)} · on ${FYP.esc(d.name)}, version ${d.version}</footer>
+      </div>`,
+    )
+    .join("");
+
+  if (!data.sessions.length && !reviews.length) {
     feedbackBody.innerHTML = `
       <h3 class="page-title">Feedback</h3>
       <p class="lead">No open actions</p>
       <div class="placeholder-card glass">
         <i class="ri-chat-quote-line"></i>
-        <h3>No sessions logged yet</h3>
-        <p>When your supervisor logs a session, the feedback and action items appear here, newest first. You tick off each action as you finish it.</p>
+        <h3>No feedback yet</h3>
+        <p>Comments on your documents and your supervisor's session notes appear here, newest first.</p>
       </div>`;
     return;
   }
@@ -370,7 +381,8 @@ function renderFeedback(s) {
   feedbackBody.innerHTML = `
     <h3 class="page-title">Feedback</h3>
     <p class="lead">${FYP.esc(s.supervisor)} · ${plural(s.openActions.length, "open action")}</p>
-    <div class="thread">${sessions}</div>
+    ${reviewCards ? `<div class="reviews">${reviewCards}</div>` : ""}
+    ${sessions ? `<div class="thread">${sessions}</div>` : ""}
     <p class="thread-note"><i class="ri-lock-line"></i> Supervisor notes are read-only. Tick an action when it is done.</p>`;
 }
 
