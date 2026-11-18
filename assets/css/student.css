@@ -1971,3 +1971,61 @@ body.no-project .fab-panel {
         grid-template-columns: 1fr;
     }
 }
+
+/* ========== 21.0 Student: Drop Zone ========== */
+/* A large dashed drop zone. Dragging a file over it highlights it */
+.dropzone {
+    min-height: 170px;
+    padding: 1.4rem 1rem;
+    border-radius: 1.1rem;
+    border: 2px dashed hsl(205 100% 40% / .45);
+    background: hsl(0 0% 100% / .35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease;
+
+    i {
+        font-size: 2.6rem;
+        color: var(--primary);
+        margin-bottom: .2rem;
+    }
+
+    .dz-title {
+        font-size: .85rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .dz-sub {
+        font-size: .72rem;
+        font-weight: 300;
+        color: var(--text-muted);
+    }
+
+    .dz-file {
+        margin-top: .3rem;
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--primary);
+        word-break: break-all;
+    }
+
+    &:hover,
+    &.dragging {
+        border-color: var(--primary);
+        background: hsl(205 100% 50% / .08);
+    }
+
+    &.has-file {
+        border-style: solid;
+    }
+}
+
+[data-theme="dark"] .dropzone {
+    background: hsl(0 0% 100% / .05);
+}

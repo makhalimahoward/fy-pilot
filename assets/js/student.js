@@ -511,8 +511,12 @@ function uploadFormHtml() {
     <label class="chapter-field" hidden>Chapter number
       <input type="number" name="chapter_no" min="1" max="20" placeholder="1">
     </label>
-    <label>File
-      <input type="file" name="file" required accept=".pdf,.doc,.docx,.ppt,.pptx,.zip">
+    <label class="dropzone" id="dropzone">
+      <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip" hidden>
+      <i class="ri-upload-cloud-2-line"></i>
+      <strong class="dz-title">Drag and drop or click here to upload</strong>
+      <small class="dz-sub">PDF, Word, PowerPoint or ZIP, up to 20 MB</small>
+      <span class="dz-file" hidden></span>
     </label>
     <button type="submit" class="btn btn-primary submit">Upload</button>
     <p class="thread-note">Each upload goes to your supervisor for review. Upload a new version to replace it.</p>
@@ -579,6 +583,52 @@ docGrid.addEventListener("change", (e) => {
 });
 
 // Uploads the file to storage, then records it against the milestone
+// Shows the chosen file in the drop zone, and checks its size
+function showChosenFile(input) {
+  const zone = input.closest(".dropzone");
+  const file = input.files[0];
+  const label = zone.querySelector(".dz-file");
+  if (!file) {
+    zone.classList.remove("has-file");
+    label.hidden = true;
+    return;
+  }
+  if (file.size > 20 * 1024 * 1024) {
+    input.value = "";
+    FYP.showToast("That file is over 20 MB");
+    return;
+  }
+  label.textContent = `${file.name} · ${(file.size / 1048576).toFixed(1)} MB`;
+  label.hidden = false;
+  zone.classList.add("has-file");
+}
+
+docGrid.addEventListener("change", (e) => {
+  if (e.target.name === "file") showChosenFile(e.target);
+});
+
+docGrid.addEventListener("dragover", (e) => {
+  const zone = e.target.closest("#dropzone");
+  if (!zone) return;
+  e.preventDefault();
+  zone.classList.add("dragging");
+});
+
+docGrid.addEventListener("dragleave", (e) => {
+  const zone = e.target.closest("#dropzone");
+  if (zone) zone.classList.remove("dragging");
+});
+
+docGrid.addEventListener("drop", (e) => {
+  const zone = e.target.closest("#dropzone");
+  if (!zone) return;
+  e.preventDefault();
+  zone.classList.remove("dragging");
+  const input = zone.querySelector("input[type=file]");
+  input.files = e.dataTransfer.files;
+  showChosenFile(input);
+});
+
 docGrid.addEventListener("submit", async (e) => {
   if (e.target.id !== "uploadForm") return;
   e.preventDefault();
