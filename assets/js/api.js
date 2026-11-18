@@ -332,3 +332,229 @@ window.FYP = {
   openStoredFile,
   ROLE_PAGE,
 };
+
+// ========== 10.0 Document Reader and Comments ==========
+// Shared by the student and supervisor pages. Shows a document's text with its comments attached,
+// and runs the back and forth between the two people. Needs the reader panel on the page
+FYP.reader = (() => {
+  let current = null; // { docId, role } while the reader is open
+  let bound = false;
+
+  const $ = (id) => document.getElementById(id);
+
+  const STATUS = {
+    open: ["overdue", "Open"],
+    addressed: ["soon", "Addressed"],
+    resolved: ["done", "Resolved"],
+  };
+
+  // The document text, its comments, and the replies to each comment
+  async function load(docId) {
+    const doc = await run(
+      sb
+        .from("documents")
+        .select("id, name, version, text_content")
+        .eq("id", docId)
+        .single(),
+    );
+    const comments = await run(
+      sb
+        .from("document_comments")
+        .select(
+          "id, quote, body, status, created_at, author:profiles!author_id(full_name), replies:comment_replies(id, body, created_at, author:profiles!author_id(full_name))",
+        )
+        .eq("document_id", docId)
+        .order("created_at", { ascending: true }),
+    );
+    return { doc, comments };
+  }
+
+  // Splits the text into paragraphs, then marks the quoted words of each comment
+  function paragraphs(text, comments) {
+    const parts = text
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => esc(p));
+    comments.forEach((c) => {
+      if (!c.quote) return;
+      const quote = esc(c.quote);
+      const i = parts.findIndex((p) => p.includes(quote));
+      if (i >= 0) {
+        parts[i] = parts[i].replace(
+          quote,
+          `<mark class="cmt cmt-${c.status}" data-mark="${c.id}">${quote}</mark>`,
+        );
+      }
+    });
+    return parts.map((p) => `<p>${p}</p>`).join("");
+  }
+
+  function card(c, role) {
+    const [cls, label] = STATUS[c.status] || STATUS.open;
+    const replies = (c.replies || [])
+      .slice()
+      .sort((a, b) => a.created_at.localeCompare(b.created_at));
+    const canAddress = role === "student" && c.status === "open";
+    const canResolve = role === "supervisor" && c.status !== "resolved";
+    return `<article class="cm" id="cm-${c.id}">
+      <header class="cm-head">
+        <strong>${esc(c.author ? c.author.full_name : "Unknown")}</strong>
+        <span class="tag ${cls}">${label}</span>
+      </header>
+      ${c.quote ? `<blockquote class="cm-quote">${esc(c.quote)}</blockquote>` : ""}
+      <p class="cm-body">${esc(c.body)}</p>
+      <small class="cm-time">${formatDate(c.created_at.slice(0, 10))}</small>
+      ${replies
+        .map(
+          (r) => `<div class="cm-reply">
+            <strong>${esc(r.author ? r.author.full_name : "")}</strong>
+            <span>${esc(r.body)}</span>
+          </div>`,
+        )
+        .join("")}
+      <div class="cm-actions">
+        ${canAddress ? `<button class="btn btn-small ghost" data-addressed="${c.id}">Mark as addressed</button>` : ""}
+        ${canResolve ? `<button class="btn btn-small ghost" data-resolve="${c.id}">Resolve</button>` : ""}
+      </div>
+      ${
+        c.status !== "resolved"
+          ? `<form class="cm-reply-form" data-reply="${c.id}">
+            <input type="text" placeholder="Reply…" required>
+            <button type="submit" class="btn btn-primary btn-small">Send</button>
+          </form>`
+          : ""
+      }
+    </article>`;
+  }
+
+  function render(data, role) {
+    $("readerKicker").textContent =
+      role === "supervisor" ? "Review" : "Your document";
+    $("readerTitle").textContent =
+      `${data.doc.name} · version ${data.doc.version}`;
+    $("readerText").innerHTML = data.doc.text_content
+      ? paragraphs(data.doc.text_content, data.comments)
+      : `<p class="cm-empty">This file has no readable text. Open the file to read it.</p>`;
+    $("readerSide").innerHTML = data.comments.length
+      ? data.comments.map((c) => card(c, role)).join("")
+      : `<p class="cm-empty">No comments yet.</p>`;
+    $("addComment").hidden = true;
+  }
+
+  async function refresh() {
+    if (current) render(await load(current.docId), current.role);
+  }
+
+  async function open(docId, role) {
+    current = { docId, role };
+    $("readerPanel").hidden = false;
+    try {
+      render(await load(docId), role);
+    } catch (e) {
+      showToast(errText(e));
+    }
+    $("readerPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function close() {
+    $("readerPanel").hidden = true;
+    current = null;
+  }
+
+  // Runs a database action, then reloads the reader so both sides see the change
+  async function act(fn, params, done) {
+    try {
+      await run(sb.rpc(fn, params));
+      showToast(done);
+      await refresh();
+    } catch (e) {
+      showToast(errText(e));
+    }
+  }
+
+  function init() {
+    if (bound || !$("readerPanel")) return;
+    bound = true;
+
+    $("readerClose").addEventListener("click", close);
+
+    // Supervisors select words in the text, then can comment on them
+    $("readerText").addEventListener("mouseup", () => {
+      const sel = window.getSelection();
+      const quote = sel ? sel.toString().trim() : "";
+      const inside =
+        sel && sel.anchorNode && $("readerText").contains(sel.anchorNode);
+      const show =
+        current && current.role === "supervisor" && inside && quote.length > 2;
+      $("addComment").hidden = !show;
+      if (show) $("addComment").dataset.quote = quote;
+    });
+
+    $("addComment").addEventListener("click", () => {
+      $("composer").dataset.quote = $("addComment").dataset.quote;
+      $("composerQuote").textContent = `On "${$("addComment").dataset.quote}"`;
+      $("composer").hidden = false;
+      $("addComment").hidden = true;
+      $("composerBody").focus();
+    });
+
+    $("composer").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const body = $("composerBody").value.trim();
+      if (!body) return showToast("Write the comment first");
+      await act(
+        "add_comment",
+        {
+          p_doc: current.docId,
+          p_quote: $("composer").dataset.quote || null,
+          p_body: body,
+        },
+        "Comment posted",
+      );
+      $("composerBody").value = "";
+      $("composer").hidden = true;
+    });
+
+    // Clicking highlighted words jumps to their comment. Buttons on comments do their action
+    $("readerPanel").addEventListener("click", (e) => {
+      const mark = e.target.closest("mark[data-mark]");
+      if (mark) {
+        const card = document.getElementById(`cm-${mark.dataset.mark}`);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const addressed = e.target.closest("[data-addressed]");
+      if (addressed) {
+        return act(
+          "mark_comment_addressed",
+          { p_comment: addressed.dataset.addressed },
+          "Marked as addressed",
+        );
+      }
+      const resolve = e.target.closest("[data-resolve]");
+      if (resolve) {
+        return act(
+          "resolve_comment",
+          { p_comment: resolve.dataset.resolve },
+          "Comment resolved",
+        );
+      }
+    });
+
+    $("readerPanel").addEventListener("submit", (e) => {
+      const form = e.target.closest("[data-reply]");
+      if (!form) return;
+      e.preventDefault();
+      const body = form.querySelector("input").value.trim();
+      if (!body) return;
+      act(
+        "reply_comment",
+        { p_comment: form.dataset.reply, p_body: body },
+        "Reply sent",
+      );
+    });
+  }
+
+  return { open, close, init };
+})();

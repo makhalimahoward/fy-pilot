@@ -14,6 +14,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/student.css">
+  <link rel="stylesheet" href="assets/css/extras.css">
 </head>
 
 <body class="loading">
@@ -177,11 +178,34 @@
   </div>
 
   <!-- ========== 10.0 Toast ========== -->
+  <!-- ========== Document Reader ========== -->
+  <section class="reader glass" id="readerPanel" hidden>
+    <div class="reader-head">
+      <div>
+        <p class="eyebrow-s" id="readerKicker"></p>
+        <h3 id="readerTitle"></h3>
+      </div>
+      <button class="btn btn-small ghost" id="readerClose"><i class="ri-close-line"></i> Close</button>
+    </div>
+    <div class="reader-body">
+      <article class="reader-text" id="readerText"></article>
+      <aside class="reader-side" id="readerSide"></aside>
+    </div>
+    <button class="btn btn-primary btn-small add-comment" id="addComment" hidden>Comment on selection</button>
+    <form class="composer" id="composer" hidden>
+      <p class="composer-quote" id="composerQuote"></p>
+      <textarea id="composerBody" rows="3" placeholder="Write your comment"></textarea>
+      <button type="submit" class="btn btn-primary btn-small">Post comment</button>
+    </form>
+  </section>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- ========== 11.0 Scripts ========== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="assets/js/api.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
   <script src="assets/js/student.js" defer></script>
 </body>
 

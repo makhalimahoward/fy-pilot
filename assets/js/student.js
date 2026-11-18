@@ -550,6 +550,7 @@ function docRow(d) {
       <small>Version ${d.version} · ${short(d.created_at.slice(0, 10))}</small>
     </div>
     <span class="tag ${cls}">${label}</span>
+    <button class="link-btn" data-read="${d.id}">Read &amp; respond</button>
     ${d.reviewer_comment ? `<p class="thread-note">${FYP.esc(d.reviewer_comment)}</p>` : ""}
   </div>`;
 }
@@ -662,6 +663,7 @@ docGrid.addEventListener("submit", async (e) => {
   button.textContent = "Uploading…";
 
   const path = `${data.project.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const textContent = await extractText(file);
   try {
     const { error: storageError } = await FYP.sb.storage
       .from("documents")
@@ -677,6 +679,7 @@ docGrid.addEventListener("submit", async (e) => {
           chapter_no: chapterNo,
           name: docLabel(docType, chapterNo, file.name),
           storage_path: path,
+          text_content: textContent,
         }),
       );
     } catch (dbError) {
@@ -694,7 +697,54 @@ docGrid.addEventListener("submit", async (e) => {
   }
 });
 
+// ========== 15.0 Reading Text From Uploads ==========
+// Reads the words out of a PDF or Word file, so comments can point at them. Files without text
+// (scans, pictures, slides, zips) are stored as they are, and the Open button still works
+function cleanText(text) {
+  const cleaned = text
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return cleaned.length >= 20 ? cleaned : null;
+}
+
+async function extractText(file) {
+  const name = file.name.toLowerCase();
+  try {
+    if (name.endsWith(".pdf") && window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+      const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() })
+        .promise;
+      const pages = [];
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        pages.push(content.items.map((item) => item.str).join(" "));
+      }
+      return cleanText(pages.join("\n\n"));
+    }
+    if (name.endsWith(".docx") && window.mammoth) {
+      const result = await mammoth.extractRawText({
+        arrayBuffer: await file.arrayBuffer(),
+      });
+      return cleanText(result.value);
+    }
+  } catch (e) {
+    // The text could not be read. The file is still stored
+  }
+  return null;
+}
+
+// Opens a document in the reader. Used by the Read & respond buttons
+docGrid.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-read]");
+  if (btn) FYP.reader.open(btn.dataset.read, "student");
+});
+
 // ========== 13.0 Start ==========
+FYP.reader.init();
+
 (async function start() {
   try {
     data = await loadData();

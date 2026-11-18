@@ -284,6 +284,7 @@ async function loadReviews() {
                 <small>${FYP.esc(p.student ? p.student.full_name : "Student")} · ${FYP.esc(m ? m.title : "")} · version ${d.version}</small>
               </div>
               <button class="link-btn" data-open="${FYP.esc(d.storage_path)}">Open</button>
+              <button class="link-btn" data-read="${d.id}">Read &amp; comment</button>
               <button class="btn btn-primary btn-small" data-approve="${d.id}">Approve</button>
               <button class="btn btn-small ghost" data-changes="${d.id}">Request changes</button>
               <div class="comment-box" id="comment-${d.id}" style="flex-basis: 100%;">
@@ -350,3 +351,11 @@ reviewsBody.addEventListener("click", async (e) => {
     }
   }
 });
+
+// Opens a document in the reader. Used by the Read & comment buttons
+reviewsBody.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-read]");
+  if (btn) FYP.reader.open(btn.dataset.read, "supervisor");
+});
+
+FYP.reader.init();
