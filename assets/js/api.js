@@ -340,6 +340,7 @@ FYP.reader = (() => {
   let current = null; // { docId, role } while the reader is open
   let bound = false;
   let changed = null; // called after any comment action, so the page can refresh its lists
+  let myId = null; // the signed-in person, so their own messages sit on the right
 
   const $ = (id) => document.getElementById(id);
 
@@ -362,7 +363,7 @@ FYP.reader = (() => {
       sb
         .from("document_comments")
         .select(
-          "id, quote, body, status, created_at, author:profiles!author_id(full_name), replies:comment_replies(id, body, created_at, author:profiles!author_id(full_name))",
+          "id, quote, body, status, created_at, author_id, author:profiles!author_id(full_name), replies:comment_replies(id, body, created_at, author_id, author:profiles!author_id(full_name))",
         )
         .eq("document_id", docId)
         .order("created_at", { ascending: true }),
@@ -427,6 +428,17 @@ FYP.reader = (() => {
     return out;
   }
 
+  // One message in the conversation. Your own messages sit on the right, the other person's on the left
+  function bubble(name, body, time, mine) {
+    return `<div class="chat-row ${mine ? "mine" : "theirs"}">
+      <div class="chat-msg">
+        <small class="chat-name">${esc(name)}</small>
+        <p>${esc(body)}</p>
+        <small class="chat-time">${formatDate(time.slice(0, 10))}</small>
+      </div>
+    </div>`;
+  }
+
   function card(c, role) {
     const [cls, label] = STATUS[c.status] || STATUS.open;
     const replies = (c.replies || [])
@@ -434,22 +446,29 @@ FYP.reader = (() => {
       .sort((a, b) => a.created_at.localeCompare(b.created_at));
     const canAddress = role === "student" && c.status === "open";
     const canResolve = role === "supervisor" && c.status === "addressed";
+    const thread = [
+      bubble(
+        c.author ? c.author.full_name : "Unknown",
+        c.body,
+        c.created_at,
+        c.author_id === myId,
+      ),
+      ...replies.map((r) =>
+        bubble(
+          r.author ? r.author.full_name : "Unknown",
+          r.body,
+          r.created_at,
+          r.author_id === myId,
+        ),
+      ),
+    ].join("");
     return `<article class="cm" id="cm-${c.id}">
       <header class="cm-head">
-        <strong>${esc(c.author ? c.author.full_name : "Unknown")}</strong>
+        <strong>${esc(c.quote ? "On this section" : "Comment")}</strong>
         <span class="tag ${cls}">${label}</span>
       </header>
       ${c.quote ? `<blockquote class="cm-quote">${esc(c.quote)}</blockquote>` : ""}
-      <p class="cm-body">${esc(c.body)}</p>
-      <small class="cm-time">${formatDate(c.created_at.slice(0, 10))}</small>
-      ${replies
-        .map(
-          (r) => `<div class="cm-reply">
-            <strong>${esc(r.author ? r.author.full_name : "")}</strong>
-            <span>${esc(r.body)}</span>
-          </div>`,
-        )
-        .join("")}
+      <div class="chat">${thread}</div>
       <div class="cm-actions">
         ${canAddress ? `<button class="btn btn-small ghost" data-addressed="${c.id}">Mark as addressed</button>` : ""}
         ${canResolve ? `<button class="btn btn-small ghost" data-resolve="${c.id}">Resolve</button>` : ""}
@@ -491,6 +510,10 @@ FYP.reader = (() => {
 
   async function open(docId, role) {
     current = { docId, role };
+    const {
+      data: { session },
+    } = await sb.auth.getSession();
+    myId = session ? session.user.id : null;
     place();
     $("readerPanel").hidden = false;
     try {

@@ -613,3 +613,58 @@ mark.cmt-resolved {
     transform: none;
     box-shadow: none;
 }
+
+/* Comment conversation: your messages on the right, theirs on the left */
+.chat {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.chat-row {
+    display: flex;
+}
+
+.chat-row.mine {
+    justify-content: flex-end;
+}
+
+.chat-row.theirs {
+    justify-content: flex-start;
+}
+
+.chat-msg {
+    max-width: 82%;
+    padding: .5rem .75rem;
+    border-radius: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+}
+
+.chat-row.mine .chat-msg {
+    background: hsl(205 100% 50% / .12);
+    border-bottom-right-radius: .3rem;
+}
+
+.chat-row.theirs .chat-msg {
+    border-bottom-left-radius: .3rem;
+}
+
+.chat-msg p {
+    margin: .15rem 0;
+    font-size: .85rem;
+    line-height: 1.45;
+}
+
+.chat-name {
+    display: block;
+    font-size: .7rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.chat-time {
+    display: block;
+    font-size: .65rem;
+    color: var(--text-muted);
+}
